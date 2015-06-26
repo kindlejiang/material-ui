@@ -1,13 +1,13 @@
-var React = require('react');
-var Router = require('react-router');
-var Link = Router.Link;
-var mui = require('mui');
-var Paper = mui.Paper;
+let React = require('react');
+let Router = require('react-router');
+let { Paper, Mixins, Styles } = require('material-ui');
 
-var {StylePropable, StyleResizable} = mui.Mixins;
-var {Colors, Spacing, Transitions, Typography} = mui.Styles;
+let Link = Router.Link;
+let { StylePropable, StyleResizable } = Mixins;
+let { Colors, Spacing, Transitions, Typography } = Styles;
 
-var HomeFeature = React.createClass({
+
+let HomeFeature = React.createClass({
 
   mixins: [StylePropable, StyleResizable],
 
@@ -19,23 +19,23 @@ var HomeFeature = React.createClass({
     lastChild: React.PropTypes.bool
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       firstChild: false,
       lastChild: false
     };
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       zDepth: 0
     };
   },
 
-  getStyles: function() {
-    var desktopGutter = Spacing.desktopGutter;
-    var desktopKeylineIncrement = Spacing.desktopKeylineIncrement;
-    var styles = {
+  getStyles() {
+    let desktopGutter = Spacing.desktopGutter;
+    let desktopKeylineIncrement = Spacing.desktopKeylineIncrement;
+    let styles = {
       root: {
         transition: Transitions.easeOut(),
         maxWidth: '300px',
@@ -63,7 +63,7 @@ var HomeFeature = React.createClass({
         textAlign: 'center',
         margin: '0px',
         padding: '0px',
-        lineHeight: desktopKeylineIncrement + 'px'        
+        lineHeight: desktopKeylineIncrement + 'px'
       },
       rootWhenLastChild: {
         marginBottom: '0px'
@@ -77,7 +77,7 @@ var HomeFeature = React.createClass({
       }
     };
 
-    if (this.isDeviceSize(StyleResizable.statics.Sizes.MEDIUM) || 
+    if (this.isDeviceSize(StyleResizable.statics.Sizes.MEDIUM) ||
         this.isDeviceSize(StyleResizable.statics.Sizes.LARGE)) {
       styles.root = this.mergeAndPrefix(
         styles.root,
@@ -90,13 +90,13 @@ var HomeFeature = React.createClass({
     return styles;
   },
 
-  render: function() {
-    var styles = this.getStyles();
+  render() {
+    let styles = this.getStyles();
 
     return (
-      <Paper 
+      <Paper
         zDepth={this.state.zDepth}
-        onMouseOver={this._onMouseOver} 
+        onMouseOver={this._onMouseOver}
         onMouseOut={this._onMouseOut}
         style={this.mergeAndPrefix(
           styles.root,
@@ -109,13 +109,13 @@ var HomeFeature = React.createClass({
     );
   },
 
-  _onMouseOver: function() {
+  _onMouseOver() {
     this.setState({
       zDepth: 4
     });
   },
 
-  _onMouseOut: function() {
+  _onMouseOut() {
     this.setState({
       zDepth: 0
     });

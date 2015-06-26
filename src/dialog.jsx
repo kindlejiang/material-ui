@@ -1,9 +1,9 @@
-var React = require('react');
-var StylePropable = require('./mixins/style-propable');
-var Spacing = require('./styles/spacing');
-var DialogWindow = require('./dialog-window');
+let React = require('react');
+let StylePropable = require('./mixins/style-propable');
+let DialogWindow = require('./dialog-window');
 
-var Dialog = React.createClass({
+
+let Dialog = React.createClass({
 
   mixins: [StylePropable],
 
@@ -13,37 +13,38 @@ var Dialog = React.createClass({
 
   propTypes: {
     title: React.PropTypes.node,
-    contentInnerStyle: React.PropTypes.object,
+    contentInnerStyle: React.PropTypes.object
   },
 
-  getStyles: function() {
-    var gutter = Spacing.desktopGutter + 'px ';
-    var styles = {
+  getStyles() {
+    let spacing = this.context.muiTheme.spacing;
+    let gutter = spacing.desktopGutter + 'px ';
+    let styles = {
       title: {
         margin: 0,
         padding: gutter + gutter + '0 ' + gutter,
         color: this.context.muiTheme.palette.textColor,
         fontSize: '24px',
         lineHeight: '32px',
-        fontWeight: '400',
+        fontWeight: '400'
       },
       content: {
-        padding: Spacing.desktopGutter
+        padding: spacing.desktopGutter
       }
     };
     return styles;
   },
 
-  render: function() {
-    var {
+  render() {
+    let {
       className,
       contentInnerStyle,
       ...other
     } = this.props;
 
-    var styles = this.getStyles();
+    let styles = this.getStyles();
 
-    var title;
+    let title;
     if (this.props.title) {
       // If the title is a string, wrap in an h3 tag.
       // If not, just use it as a node.
@@ -69,11 +70,11 @@ var Dialog = React.createClass({
     );
   },
 
-  dismiss: function() {
+  dismiss() {
     this.refs.dialogWindow.dismiss();
   },
 
-  show: function() {
+  show() {
     this.refs.dialogWindow.show();
   }
 

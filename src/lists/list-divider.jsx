@@ -1,7 +1,8 @@
-var React = require('react/addons');
-var StylePropable = require('../mixins/style-propable');
+let React = require('react/addons');
+let StylePropable = require('../mixins/style-propable');
 
-var ListDivider = React.createClass({
+
+let ListDivider = React.createClass({
 
   mixins: [StylePropable],
 
@@ -13,15 +14,14 @@ var ListDivider = React.createClass({
     inset: React.PropTypes.bool
   },
 
-  render: function() {
-
-    var {
+  render() {
+    let {
       inset,
       style,
       ...other
     } = this.props;
 
-    var mergedStyles = this.mergeAndPrefix({
+    let mergedStyles = this.mergeAndPrefix({
       margin: 0,
       marginTop: -1,
       marginLeft: inset ? 72 : 0,

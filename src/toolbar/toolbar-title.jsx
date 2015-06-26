@@ -1,7 +1,8 @@
-var React = require('react');
-var StylePropable = require('../mixins/style-propable');
+let React = require('react');
+let StylePropable = require('../mixins/style-propable');
 
-var ToolbarTitle = React.createClass({
+
+let ToolbarTitle = React.createClass({
 
   mixins: [StylePropable],
 
@@ -13,18 +14,18 @@ var ToolbarTitle = React.createClass({
     text: React.PropTypes.string,
   },
 
-  getTheme: function() {
+  getTheme() {
     return this.context.muiTheme.component.toolbar;
   },
 
-  render: function() {
-    var {
+  render() {
+    let {
       style,
       text,
       ...other
     } = this.props;
 
-    var styles = this.mergeAndPrefix({
+    let styles = this.mergeAndPrefix({
       paddingRight: this.context.muiTheme.spacing.desktopGutterLess,
       lineHeight: this.getTheme().height + 'px',
       fontSize: this.getTheme().titleFontSize + 'px',

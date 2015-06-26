@@ -1,14 +1,17 @@
-var React = require('react');
-var KeyCode = require('./utils/key-code');
-var StylePropable = require('./mixins/style-propable');
-var AutoPrefix = require('./styles/auto-prefix');
-var Transitions = require('./styles/transitions');
-var WindowListenable = require('./mixins/window-listenable');
-var Overlay = require('./overlay');
-var Paper = require('./paper');
-var Menu = require('./menu/menu');
+let React = require('react');
+let KeyCode = require('./utils/key-code');
+let StylePropable = require('./mixins/style-propable');
+let AutoPrefix = require('./styles/auto-prefix');
+let Transitions = require('./styles/transitions');
+let WindowListenable = require('./mixins/window-listenable');
+let Overlay = require('./overlay');
+let Paper = require('./paper');
+let Menu = require('./menu/menu');
 
-var LeftNav = React.createClass({
+let openNavEventHandler = null;
+
+
+let LeftNav = React.createClass({
 
   mixins: [StylePropable, WindowListenable],
 
@@ -33,62 +36,62 @@ var LeftNav = React.createClass({
     'resize': '_onWindowResize'
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       docked: true
     };
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       open: this.props.docked,
       maybeSwiping: false,
-      swiping: false
+      swiping: null
     };
   },
-  
-  componentDidMount: function() {
-    this._updateMenuHeight();
-    this._enableSwipeHandling();
-  },
-  
-  componentDidUpdate: function(prevProps, prevState) {
+
+  componentDidMount() {
     this._updateMenuHeight();
     this._enableSwipeHandling();
   },
 
-  componentWillUnmount: function() {
+  componentDidUpdate(prevProps, prevState) {
+    this._updateMenuHeight();
+    this._enableSwipeHandling();
+  },
+
+  componentWillUnmount() {
     this._disableSwipeHandling();
   },
 
-  toggle: function() {
+  toggle() {
     this.setState({ open: !this.state.open });
     return this;
   },
 
-  close: function() {
+  close() {
     this.setState({ open: false });
     if (this.props.onNavClose) this.props.onNavClose();
     return this;
   },
 
-  open: function() {
+  open() {
     this.setState({ open: true });
     if (this.props.onNavOpen) this.props.onNavOpen();
     return this;
   },
 
-  getThemePalette: function() {
+  getThemePalette() {
     return this.context.muiTheme.palette;
   },
 
-  getTheme: function() {
+  getTheme() {
     return this.context.muiTheme.component.leftNav;
   },
 
-  getStyles: function() {
-    var x = this._getTranslateMultiplier() * (this.state.open ? 0 : this._getMaxTranslateX()) + 'px';
-    var styles = {
+  getStyles() {
+    let x = this._getTranslateMultiplier() * (this.state.open ? 0 : this._getMaxTranslateX()) + 'px';
+    let styles = {
       root: {
         height: '100%',
         width: this.getTheme().width,
@@ -127,18 +130,21 @@ var LeftNav = React.createClass({
     return styles;
   },
 
-  render: function() {
-    var selectedIndex = this.props.selectedIndex;
-    var overlay;
+  render() {
+    let selectedIndex = this.props.selectedIndex;
+    let overlay;
 
-    var styles = this.getStyles();
+    let styles = this.getStyles();
     if (!this.props.docked) {
-      overlay = <Overlay ref="overlay"
-                         show={this.state.open}
-                         transitionEnabled={!this.state.swiping}
-                         onTouchTap={this._onOverlayTouchTap} />;
+      overlay = (
+        <Overlay
+          ref="overlay"
+          show={this.state.open}
+          transitionEnabled={!this.state.swiping}
+          onTouchTap={this._onOverlayTouchTap}
+        />
+      );
     }
-
 
     return (
       <div className={this.props.className}>
@@ -149,7 +155,7 @@ var LeftNav = React.createClass({
           rounded={false}
           transitionEnabled={!this.state.swiping}
           style={this.mergeAndPrefix(
-            styles.root, 
+            styles.root,
             this.props.openRight && styles.rootWhenOpenRight,
             this.props.style)}>
             {this.props.header}
@@ -158,7 +164,7 @@ var LeftNav = React.createClass({
               style={this.mergeAndPrefix(styles.menu)}
               zDepth={0}
               menuItems={this.props.menuItems}
-              menuItemStyle={this.mergeAndPrefix(styles.menuItem)} 
+              menuItemStyle={this.mergeAndPrefix(styles.menuItem)}
               menuItemStyleLink={this.mergeAndPrefix(styles.menuItemLink)}
               menuItemStyleSubheader={this.mergeAndPrefix(styles.menuItemSubheader)}
               selectedIndex={selectedIndex}
@@ -167,62 +173,72 @@ var LeftNav = React.createClass({
       </div>
     );
   },
-  
-  _updateMenuHeight: function() {
+
+  _updateMenuHeight() {
     if (this.props.header) {
-      var container = React.findDOMNode(this.refs.clickAwayableElement);
-      var menu = React.findDOMNode(this.refs.menuItems);
-      var menuHeight = container.clientHeight - menu.offsetTop;
+      let container = React.findDOMNode(this.refs.clickAwayableElement);
+      let menu = React.findDOMNode(this.refs.menuItems);
+      let menuHeight = container.clientHeight - menu.offsetTop;
       menu.style.height = menuHeight + 'px';
     }
   },
 
-  _onMenuItemClick: function(e, key, payload) {
+  _onMenuItemClick(e, key, payload) {
     if (this.props.onChange && this.props.selectedIndex !== key) {
       this.props.onChange(e, key, payload);
     }
     if (!this.props.docked) this.close();
   },
 
-  _onOverlayTouchTap: function() {
+  _onOverlayTouchTap() {
     this.close();
   },
 
-  _onWindowKeyUp: function(e) {
+  _onWindowKeyUp(e) {
     if (e.keyCode == KeyCode.ESC &&
         !this.props.docked &&
         this.state.open) {
       this.close();
     }
   },
-  
-  _onWindowResize: function(e) {
+
+  _onWindowResize(e) {
     this._updateMenuHeight();
   },
 
-  _getMaxTranslateX: function() {
+  _getMaxTranslateX() {
     return this.getTheme().width + 10;
   },
 
-  _getTranslateMultiplier: function() {
+  _getTranslateMultiplier() {
     return this.props.openRight ? 1 : -1;
   },
 
-  _enableSwipeHandling: function() {
-    if (this.state.open && !this.props.docked) {
+  _enableSwipeHandling() {
+    if (!this.props.docked) {
       document.body.addEventListener('touchstart', this._onBodyTouchStart);
+      if (!openNavEventHandler) {
+        openNavEventHandler = this._onBodyTouchStart;
+      }
     } else {
       this._disableSwipeHandling();
     }
   },
 
-  _disableSwipeHandling: function() {
+  _disableSwipeHandling() {
     document.body.removeEventListener('touchstart', this._onBodyTouchStart);
+    if (openNavEventHandler === this._onBodyTouchStart) {
+      openNavEventHandler = null;
+    }
   },
 
-  _onBodyTouchStart: function(e) {
-    var touchStartX = e.touches[0].pageX;
-    var touchStartY = e.touches[0].pageY;
+  _onBodyTouchStart(e) {
+    if (!this.state.open && openNavEventHandler !== this._onBodyTouchStart) {
+      return;
+    }
+
+    let touchStartX = e.touches[0].pageX;
+    let touchStartY = e.touches[0].pageY;
     this.setState({
       maybeSwiping: true,
       touchStartX: touchStartX,
@@ -234,62 +250,77 @@ var LeftNav = React.createClass({
     document.body.addEventListener('touchcancel', this._onBodyTouchEnd);
   },
 
-  _onBodyTouchMove: function(e) {
-    var currentX = e.touches[0].pageX;
-    var currentY = e.touches[0].pageY;
+  _setPosition(translateX) {
+    let leftNav = React.findDOMNode(this.refs.clickAwayableElement);
+    leftNav.style[AutoPrefix.single('transform')] =
+      'translate3d(' + (this._getTranslateMultiplier() * translateX) + 'px, 0, 0)';
+    this.refs.overlay.setOpacity(1 - translateX / this._getMaxTranslateX());
+  },
+
+  _getTranslateX(currentX) {
+    return Math.min(
+             Math.max(
+               this.state.swiping === 'closing' ?
+                 this._getTranslateMultiplier() * (currentX - this.state.swipeStartX) :
+                 this._getMaxTranslateX() - this._getTranslateMultiplier() * (this.state.swipeStartX - currentX),
+               0
+             ),
+             this._getMaxTranslateX()
+           );
+  },
+
+  _onBodyTouchMove(e) {
+    let currentX = e.touches[0].pageX;
+    let currentY = e.touches[0].pageY;
 
     if (this.state.swiping) {
       e.preventDefault();
-      var translateX = Math.min(
-                         Math.max(
-                           this._getTranslateMultiplier() * (currentX - this.state.swipeStartX),
-                           0
-                         ),
-                         this._getMaxTranslateX()
-                       );
-
-      var leftNav = React.findDOMNode(this.refs.clickAwayableElement);
-      leftNav.style[AutoPrefix.single('transform')] =
-        'translate3d(' + (this._getTranslateMultiplier() * translateX) + 'px, 0, 0)';
-      this.refs.overlay.setOpacity(1 - translateX / this._getMaxTranslateX());
-    } else if (this.state.maybeSwiping) {
-      var dXAbs = Math.abs(currentX - this.state.touchStartX);
-      var dYAbs = Math.abs(currentY - this.state.touchStartY);
+      this._setPosition(this._getTranslateX(currentX));
+    }
+    else if (this.state.maybeSwiping) {
+      let dXAbs = Math.abs(currentX - this.state.touchStartX);
+      let dYAbs = Math.abs(currentY - this.state.touchStartY);
       // If the user has moved his thumb ten pixels in either direction,
       // we can safely make an assumption about whether he was intending
       // to swipe or scroll.
-      var threshold = 10;
+      let threshold = 10;
 
       if (dXAbs > threshold && dYAbs <= threshold) {
         this.setState({
-          swiping: true,
+          swiping: this.state.open ? 'closing' : 'opening',
+          open: true,
           swipeStartX: currentX
         });
-      } else if (dXAbs <= threshold && dYAbs > threshold) {
+        this._setPosition(this._getTranslateX(currentX));
+      }
+      else if (dXAbs <= threshold && dYAbs > threshold) {
         this._onBodyTouchEnd();
       }
     }
   },
 
-  _onBodyTouchEnd: function() {
-    var shouldClose = false;
-
-    if (this.state.swiping) shouldClose = true;
+  _onBodyTouchEnd(e) {
+    let currentX = e.changedTouches[0].pageX;
+    let translateRatio = this._getTranslateX(currentX) / this._getMaxTranslateX();
 
     this.setState({
       maybeSwiping: false,
-      swiping: false
+      swiping: null
     });
 
-    // We have to call close() after setting swiping to false,
+    // We have to open or close after setting swiping to null,
     // because only then CSS transition is enabled.
-    if (shouldClose) this.close();
+    if (translateRatio > 0.5) {
+      this.close();
+    } else {
+      this._setPosition(0);
+    }
 
     document.body.removeEventListener('touchmove', this._onBodyTouchMove);
     document.body.removeEventListener('touchend', this._onBodyTouchEnd);
     document.body.removeEventListener('touchcancel', this._onBodyTouchEnd);
   }
-  
+
 });
 
 module.exports = LeftNav;

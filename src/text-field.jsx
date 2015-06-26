@@ -1,11 +1,12 @@
-var React = require('react');
-var ColorManipulator = require('./utils/color-manipulator');
-var StylePropable = require('./mixins/style-propable');
-var Transitions = require('./styles/transitions');
-var UniqueId = require('./utils/unique-id');
-var EnhancedTextarea = require('./enhanced-textarea');
+let React = require('react');
+let ColorManipulator = require('./utils/color-manipulator');
+let StylePropable = require('./mixins/style-propable');
+let Transitions = require('./styles/transitions');
+let UniqueId = require('./utils/unique-id');
+let EnhancedTextarea = require('./enhanced-textarea');
 
-var TextField = React.createClass({
+
+let TextField = React.createClass({
 
   mixins: [StylePropable],
 
@@ -31,18 +32,17 @@ var TextField = React.createClass({
     floatingLabelStyle: React.PropTypes.object
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       fullWidth: false,
       type: 'text',
-      rows: 1,
+      rows: 1
     };
   },
 
-  getInitialState: function() {
-    var props = this.props;
-    if (props.children)
-      props = props.children.props;
+  getInitialState() {
+    let props = (this.props.children) ? this.props.children.props : this.props;
+
     return {
       errorText: this.props.errorText,
       hasValue: props.value || props.defaultValue ||
@@ -50,44 +50,45 @@ var TextField = React.createClass({
     };
   },
 
-  getTheme: function() {
+  getTheme() {
     return this.context.muiTheme.component.textField;
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     this._uniqueId = UniqueId.generate();
   },
 
-  componentWillReceiveProps: function(nextProps) {
-    var hasErrorProp = nextProps.hasOwnProperty('errorText');
-    var newState = {};
+  componentWillReceiveProps(nextProps) {
+    let hasErrorProp = nextProps.hasOwnProperty('errorText');
+    let newState = {};
 
-    if (hasErrorProp) newState.errorText = nextProps.errorText;
-    if (nextProps.children && nextProps.children.props)
-    {
+    newState.errorText = nextProps.errorText;
+    if (nextProps.children && nextProps.children.props) {
       nextProps = nextProps.children.props;
     }
 
-    var hasValueLinkProp = nextProps.hasOwnProperty('valueLink');
-    var hasValueProp = nextProps.hasOwnProperty('value');
-    var hasNewDefaultValue = nextProps.defaultValue !== this.props.defaultValue;
+    let hasValueLinkProp = nextProps.hasOwnProperty('valueLink');
+    let hasValueProp = nextProps.hasOwnProperty('value');
+    let hasNewDefaultValue = nextProps.defaultValue !== this.props.defaultValue;
 
     if (hasValueLinkProp) {
       newState.hasValue = nextProps.valueLink.value;
-    } else if (hasValueProp) {
+    }
+    else if (hasValueProp) {
       newState.hasValue = nextProps.value;
-    } else if (hasNewDefaultValue) {
+    }
+    else if (hasNewDefaultValue) {
       newState.hasValue = nextProps.defaultValue;
     }
 
     if (newState) this.setState(newState);
   },
 
-  getStyles: function() {
-    var props = this.props;
-    var theme = this.getTheme();
+  getStyles() {
+    let props = this.props;
+    let theme = this.getTheme();
 
-    var styles = {
+    let styles = {
       root: {
         fontSize: 16,
         lineHeight: '24px',
@@ -201,8 +202,8 @@ var TextField = React.createClass({
     return styles;
   },
 
-  render: function() {
-    var {
+  render() {
+    let {
       className,
       errorText,
       floatingLabelText,
@@ -218,19 +219,19 @@ var TextField = React.createClass({
       ...other
     } = this.props;
 
-    var styles = this.getStyles();
+    let styles = this.getStyles();
 
-    var inputId = this.props.id || this._uniqueId;
+    let inputId = this.props.id || this._uniqueId;
 
-    var errorTextElement = this.state.errorText ? (
+    let errorTextElement = this.state.errorText ? (
       <div style={this.mergeAndPrefix(styles.error)}>{this.state.errorText}</div>
     ) : null;
 
-    var hintTextElement = this.props.hintText ? (
+    let hintTextElement = this.props.hintText ? (
       <div style={this.mergeAndPrefix(styles.hint)}>{this.props.hintText}</div>
     ) : null;
 
-    var floatingLabelTextElement = this.props.floatingLabelText ? (
+    let floatingLabelTextElement = this.props.floatingLabelText ? (
       <label
         style={this.mergeAndPrefix(styles.floatingLabel, this.props.floatingLabelStyle)}
         htmlFor={inputId}>
@@ -238,8 +239,8 @@ var TextField = React.createClass({
       </label>
     ) : null;
 
-    var inputProps;
-    var inputElement;
+    let inputProps;
+    let inputElement;
 
     inputProps = {
       id: inputId,
@@ -273,12 +274,12 @@ var TextField = React.createClass({
       );
     }
 
-    var underlineElement = this.props.disabled ? (
+    let underlineElement = this.props.disabled ? (
       <div style={this.mergeAndPrefix(styles.underlineAfter)}></div>
     ) : (
       <hr style={this.mergeAndPrefix(styles.underline)}/>
     );
-    var focusUnderlineElement = <hr style={this.mergeAndPrefix(styles.focusUnderline)} />;
+    let focusUnderlineElement = <hr style={this.mergeAndPrefix(styles.focusUnderline)} />;
 
     return (
       <div className={this.props.className} style={this.mergeAndPrefix(styles.root, this.props.style)}>
@@ -292,39 +293,40 @@ var TextField = React.createClass({
     );
   },
 
-  blur: function() {
+  blur() {
     if (this.isMounted()) this._getInputNode().blur();
   },
 
-  clearValue: function() {
+  clearValue() {
     this.setValue('');
   },
 
-  focus: function() {
+  focus() {
     if (this.isMounted()) this._getInputNode().focus();
   },
 
-  getValue: function() {
+  getValue() {
     return this.isMounted() ? this._getInputNode().value : undefined;
   },
 
-  setErrorText: function(newErrorText) {
+  setErrorText(newErrorText) {
     if (process.env.NODE_ENV !== 'production' && this.props.hasOwnProperty('errorText')) {
       console.error('Cannot call TextField.setErrorText when errorText is defined as a property.');
-    } else if (this.isMounted()) {
+    }
+    else if (this.isMounted()) {
       this.setState({errorText: newErrorText});
     }
   },
 
-  setValue: function(newValue) {
+  setValue(newValue) {
     if (process.env.NODE_ENV !== 'production' && this._isControlled()) {
       console.error('Cannot call TextField.setValue when value or valueLink is defined as a property.');
-    } else if (this.isMounted()) {
-
+    }
+    else if (this.isMounted()) {
       if (this.props.multiLine) {
         this.refs[this._getRef()].setValue(newValue);
-
-      } else {
+      }
+      else {
         this._getInputNode().value = newValue;
       }
 
@@ -332,44 +334,44 @@ var TextField = React.createClass({
     }
   },
 
-  _getRef: function() {
+  _getRef() {
     return this.props.ref ? this.props.ref : 'input';
   },
 
-  _getInputNode: function() {
+  _getInputNode() {
     return (this.props.children || this.props.multiLine) ?
       this.refs[this._getRef()].getInputNode() : React.findDOMNode(this.refs[this._getRef()]);
   },
 
-  _handleInputBlur: function(e) {
+  _handleInputBlur(e) {
     this.setState({isFocused: false});
     if (this.props.onBlur) this.props.onBlur(e);
   },
 
-  _handleInputChange: function(e) {
+  _handleInputChange(e) {
     this.setState({hasValue: e.target.value});
     if (this.props.onChange) this.props.onChange(e);
   },
 
-  _handleInputFocus: function(e) {
+  _handleInputFocus(e) {
     if (this.props.disabled)
       return
     this.setState({isFocused: true});
     if (this.props.onFocus) this.props.onFocus(e);
   },
 
-  _handleInputKeyDown: function(e) {
+  _handleInputKeyDown(e) {
     if (e.keyCode === 13 && this.props.onEnterKeyDown) this.props.onEnterKeyDown(e);
     if (this.props.onKeyDown) this.props.onKeyDown(e);
   },
 
-  _handleTextAreaHeightChange: function(e, height) {
-    var newHeight = height + 24;
+  _handleTextAreaHeightChange(e, height) {
+    let newHeight = height + 24;
     if (this.props.floatingLabelText) newHeight += 24;
     React.findDOMNode(this).style.height = newHeight + 'px';
   },
 
-  _isControlled: function() {
+  _isControlled() {
     return this.props.hasOwnProperty('value') ||
       this.props.hasOwnProperty('valueLink');
   }

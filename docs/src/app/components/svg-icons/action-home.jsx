@@ -1,10 +1,10 @@
-var React = require('react');
-var mui = require('mui');
-var SvgIcon = mui.SvgIcon;
+let React = require('react');
+let { SvgIcon } = require('mui');
 
-var ActionHome = React.createClass({
 
-  render: function() {
+class ActionHome extends React.Component {
+
+  render() {
     return (
       <SvgIcon {...this.props}>
         <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path>
@@ -12,6 +12,6 @@ var ActionHome = React.createClass({
     );
   }
 
-});
+}
 
 module.exports = ActionHome;

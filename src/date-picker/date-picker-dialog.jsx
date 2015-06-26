@@ -1,13 +1,14 @@
-var React = require('react');
-var StylePropable = require('../mixins/style-propable');
-var WindowListenable = require('../mixins/window-listenable');
-var CssEvent = require('../utils/css-event');
-var KeyCode = require('../utils/key-code');
-var Calendar = require('./calendar');
-var DialogWindow = require('../dialog-window');
-var FlatButton = require('../flat-button');
+let React = require('react');
+let StylePropable = require('../mixins/style-propable');
+let WindowListenable = require('../mixins/window-listenable');
+let CssEvent = require('../utils/css-event');
+let KeyCode = require('../utils/key-code');
+let Calendar = require('./calendar');
+let DialogWindow = require('../dialog-window');
+let FlatButton = require('../flat-button');
 
-var DatePickerDialog = React.createClass({
+
+let DatePickerDialog = React.createClass({
 
   mixins: [StylePropable, WindowListenable],
 
@@ -32,22 +33,22 @@ var DatePickerDialog = React.createClass({
     'keyup': '_handleWindowKeyUp'
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       isCalendarActive: false,
       showMonthDayPicker: true
     };
   },
 
-  render: function() {
-    var {
+  render() {
+    let {
       initialDate,
       onAccept,
       style,
       ...other
     } = this.props;
 
-    var styles = {
+    let styles = {
       root: {
         fontSize: '14px',
         color: this.context.muiTheme.component.datePicker.calendarTextColor
@@ -62,7 +63,7 @@ var DatePickerDialog = React.createClass({
       }
     };
 
-    var actions = [
+    let actions = [
       <FlatButton
         key={0}
         label="Cancel"
@@ -78,7 +79,7 @@ var DatePickerDialog = React.createClass({
         onTouchTap={this._handleOKTouchTap} />
     ];
 
-    if(this.props.autoOk){
+    if (this.props.autoOk){
       actions = actions.slice(0, 1);
     }
 
@@ -108,25 +109,25 @@ var DatePickerDialog = React.createClass({
     );
   },
 
-  show: function() {
+  show() {
     this.refs.dialogWindow.show();
   },
 
-  dismiss: function() {
+  dismiss() {
     this.refs.dialogWindow.dismiss();
   },
 
-  _onSelectedDate: function(e) {
-    if(this.props.autoOk) {
+  _onSelectedDate(e) {
+    if (this.props.autoOk) {
       setTimeout(this._handleOKTouchTap, 300);
     }
   },
 
-  _handleCancelTouchTap: function() {
+  _handleCancelTouchTap() {
     this.dismiss();
   },
 
-  _handleOKTouchTap: function() {
+  _handleOKTouchTap() {
     if (this.props.onAccept && !this.refs.calendar.isSelectedDateDisabled()) {
       this.props.onAccept(this.refs.calendar.getSelectedDate());
     }
@@ -134,37 +135,37 @@ var DatePickerDialog = React.createClass({
     this.dismiss();
   },
 
-  _handleDialogShow: function() {
+  _handleDialogShow() {
     this.setState({
       isCalendarActive: true
     });
 
-    if(this.props.onShow) this.props.onShow();
+    if (this.props.onShow) this.props.onShow();
   },
 
-  _handleDialogDismiss: function() {
-    CssEvent.onTransitionEnd(this.refs.dialogWindow.getDOMNode(), function() {
+  _handleDialogDismiss() {
+    CssEvent.onTransitionEnd(this.refs.dialogWindow.getDOMNode(), () => {
       this.setState({
         isCalendarActive: false,
         showMonthDayPicker: true
       });
-    }.bind(this));
+    });
 
-    if(this.props.onDismiss) this.props.onDismiss();
+    if (this.props.onDismiss) this.props.onDismiss();
   },
 
-  _handleDialogClickAway: function() {
-    CssEvent.onTransitionEnd(this.refs.dialogWindow.getDOMNode(), function() {
+  _handleDialogClickAway() {
+    CssEvent.onTransitionEnd(this.refs.dialogWindow.getDOMNode(), () => {
       this.setState({
         isCalendarActive: false,
         showMonthDayPicker: true
       });
-    }.bind(this));
+    });
 
     if (this.props.onClickAway) this.props.onClickAway();
   },
 
-  _handleWindowKeyUp: function(e) {
+  _handleWindowKeyUp(e) {
     if (this.refs.dialogWindow.isOpen()) {
       switch (e.keyCode) {
         case KeyCode.ENTER:

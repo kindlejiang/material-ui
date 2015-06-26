@@ -1,6 +1,7 @@
-var Colors = require('../colors');
-var Spacing = require('../spacing');
-var ColorManipulator = require('../../utils/color-manipulator');
+let Colors = require('../colors');
+let Spacing = require('../spacing');
+let ColorManipulator = require('../../utils/color-manipulator');
+
 
 /**
  *  Light Theme is the default theme used in material-ui. It is guaranteed to
@@ -8,10 +9,10 @@ var ColorManipulator = require('../../utils/color-manipulator');
  *  in a custom theme will default to these values.
  */
 
-var LightTheme = {
+let LightTheme = {
   spacing: Spacing,
   contentFontFamily: 'Roboto, sans-serif',
-  getPalette: function() {
+  getPalette() {
     return {
       primary1Color: Colors.cyan500,
       primary2Color: Colors.cyan700,
@@ -25,17 +26,18 @@ var LightTheme = {
       disabledColor: ColorManipulator.fade(Colors.darkBlack, 0.3)
     };
   },
-  getComponentThemes: function(palette) {
-    var obj = {
+  getComponentThemes(palette, spacing) {
+    spacing = spacing || Spacing;
+    let obj = {
       appBar: {
         color: palette.primary1Color,
         textColor: Colors.darkWhite,
-        height: Spacing.desktopKeylineIncrement
+        height: spacing.desktopKeylineIncrement
       },
       button: {
         height: 36,
         minWidth: 88,
-        iconButtonSize: Spacing.iconSize * 2
+        iconButtonSize: spacing.iconSize * 2
       },
       checkbox: {
         boxColor: palette.textColor,
@@ -70,7 +72,7 @@ var LightTheme = {
         secondaryIconColor: Colors.white,
       },
       leftNav: {
-        width: Spacing.desktopKeylineIncrement * 4,
+        width: spacing.desktopKeylineIncrement * 4,
         color: Colors.white
       },
       menu: {
@@ -81,11 +83,11 @@ var LightTheme = {
         dataHeight: 32,
         height: 48,
         hoverColor: 'rgba(0, 0, 0, .035)',
-        padding: Spacing.desktopGutter,
+        padding: spacing.desktopGutter,
         selectedTextColor: palette.accent1Color,
       },
       menuSubheader: {
-        padding: Spacing.desktopGutter,
+        padding: spacing.desktopGutter,
         borderColor: palette.borderColor,
         textColor: palette.primary1Color
       },
@@ -125,6 +127,32 @@ var LightTheme = {
         textColor: Colors.white,
         backgroundColor: '#323232',
         actionColor: palette.accent1Color
+      },
+      table: {
+        backgroundColor: Colors.white
+      },
+      tableHeader: {
+        borderColor: palette.borderColor
+      },
+      tableHeaderColumn: {
+        textColor: Colors.lightBlack,
+        height: 56,
+        spacing: 28
+      },
+      tableFooter: {
+        borderColor: palette.borderColor,
+        textColor: Colors.lightBlack
+      },
+      tableRow: {
+        hoverColor: Colors.grey200,
+        stripeColor: ColorManipulator.lighten(palette.primary1Color, 0.55),
+        selectedColor: Colors.grey300,
+        textColor: Colors.darkBlack,
+        borderColor: palette.borderColor
+      },
+      tableRowColumn: {
+        height: 48,
+        spacing: 28
       },
       timePicker: {
         color: Colors.white,

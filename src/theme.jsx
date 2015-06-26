@@ -1,8 +1,8 @@
-var React = require('react');
-var ThemeManager = require('./styles/theme-manager');
+let React = require('react');
+let ThemeManager = require('./styles/theme-manager');
 
 
-var Theme = React.createClass({
+let Theme = React.createClass({
 
   propTypes: {
     theme: React.PropTypes.object
@@ -13,14 +13,14 @@ var Theme = React.createClass({
     muiThemeManager: React.PropTypes.object.isRequired
   },
 
-  getChildContext: function() {
+  getChildContext() {
     return {
       muiTheme: this.themeManager.getCurrentTheme(),
       muiThemeManager: this.themeManager
     };
   },
 
-  componentWillMount: function() {
+  componentWillMount() {
     this.themeManager = new ThemeManager();
 
     if (this.props.theme) {
@@ -28,7 +28,7 @@ var Theme = React.createClass({
     }
   },
 
-  render: function() {
+  render() {
     return this.props.children({
       muiTheme: this.themeManager.getCurrentTheme(),
       muiThemeManager: this.themeManager
@@ -42,12 +42,12 @@ function getDisplayName(Component) {
 }
 
 function theme(customTheme) {
-  return function(Component) {
+  return (Component) => {
     return React.createClass({
 
       displayName: 'Theme(' + getDisplayName(Component) + ')',
 
-      render: function() {
+      render() {
         return (
           <Theme theme={customTheme}>
             {

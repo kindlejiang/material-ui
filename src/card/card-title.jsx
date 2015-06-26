@@ -1,8 +1,9 @@
-var React = require('react');
-var Styles = require('../styles');
-var StylePropable = require('../mixins/style-propable');
+let React = require('react');
+let Styles = require('../styles');
+let StylePropable = require('../mixins/style-propable');
 
-var CardTitle = React.createClass({
+
+let CardTitle = React.createClass({
 
   mixins:[StylePropable],
 
@@ -15,13 +16,13 @@ var CardTitle = React.createClass({
     subtitleStyle: React.PropTypes.object
   },
 
-  getDefaultProps: function () {
+  getDefaultProps() {
     return {
       titleColor: Styles.Colors.darkBlack,
       subtitleColor: Styles.Colors.lightBlack
     };
   },
-  getStyles: function () {
+  getStyles() {
     return {
       root: {
         padding: 16
@@ -39,11 +40,11 @@ var CardTitle = React.createClass({
       }
     }
   },
-  render: function () {
-    var styles = this.getStyles();
-    var rootStyle = this.mergeAndPrefix(styles.root, this.props.style);
-    var titleStyle = this.mergeAndPrefix(styles.title, this.props.titleStyle);
-    var subtitleStyle = this.mergeAndPrefix(styles.subtitle, this.props.subtitleStyle);
+  render() {
+    let styles = this.getStyles();
+    let rootStyle = this.mergeAndPrefix(styles.root, this.props.style);
+    let titleStyle = this.mergeAndPrefix(styles.title, this.props.titleStyle);
+    let subtitleStyle = this.mergeAndPrefix(styles.subtitle, this.props.subtitleStyle);
 
     return (
       <div {...this.props} style={rootStyle}>

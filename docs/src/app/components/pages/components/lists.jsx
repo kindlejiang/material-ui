@@ -1,27 +1,32 @@
-var React = require('react');
-var mui = require('mui');
-var Avatar = mui.Avatar;
-var Checkbox = mui.Checkbox;
-var Colors = mui.Styles.Colors;
-var IconButton = mui.IconButton;
-var List = mui.List;
-var ListDivider = mui.ListDivider;
-var ListItem = mui.ListItem;
-var Toggle = mui.Toggle;
-var ComponentDoc = require('../../component-doc.jsx');
-var MobileTearSheet = require('../../mobile-tear-sheet.jsx');
-var ActionAssignment = require('../../svg-icons/action-assignment.jsx');
-var ActionGrade = require('../../svg-icons/action-grade.jsx');
-var ActionInfo = require('../../svg-icons/action-info.jsx');
-var CommunicationCall = require('../../svg-icons/communication-call.jsx');
-var CommunicationChatBubble = require('../../svg-icons/communication-chat-bubble.jsx');
-var CommunicationEmail = require('../../svg-icons/communication-email.jsx');
-var ContentDrafts = require('../../svg-icons/content-drafts.jsx');
-var ContentInbox = require('../../svg-icons/content-inbox.jsx');
-var ContentSend = require('../../svg-icons/content-send.jsx');
-var EditorInsertChart = require('../../svg-icons/editor-insert-chart.jsx');
-var FileFolder = require('../../svg-icons/file-folder.jsx');
-var ToggleStarBorder = require('../../svg-icons/toggle-star-border.jsx');
+let React = require('react');
+let mui = require('material-ui');
+let ComponentDoc = require('../../component-doc');
+let MobileTearSheet = require('../../mobile-tear-sheet');
+let ActionAssignment = require('svg-icons/action/assignment');
+let ActionGrade = require('svg-icons/action/grade');
+let ActionInfo = require('svg-icons/action/info');
+let CommunicationCall = require('svg-icons/communication/call');
+let CommunicationChatBubble = require('svg-icons/communication/chat-bubble');
+let CommunicationEmail = require('svg-icons/communication/email');
+let ContentDrafts = require('svg-icons/content/drafts');
+let ContentInbox = require('svg-icons/content/inbox');
+let ContentSend = require('svg-icons/content/send');
+let EditorInsertChart = require('svg-icons/editor/insert-chart');
+let FileFolder = require('svg-icons/file/folder');
+let ToggleStarBorder = require('svg-icons/toggle/star-border');
+
+let {
+  Avatar,
+  Checkbox,
+  IconButton,
+  List,
+  ListDivider,
+  ListItem,
+  Styles,
+  Toggle
+} = mui;
+let { Colors } = Styles;
+
 
 class ListsPage extends React.Component {
 
@@ -31,7 +36,7 @@ class ListsPage extends React.Component {
 
   render() {
 
-    var code = `
+    let code = `
       //First Example
       <List>
         <ListItem leftIcon={<ContentInbox />}>Inbox</ListItem>
@@ -117,7 +122,7 @@ class ListsPage extends React.Component {
       </List>
     `;
 
-    var componentInfo = [
+    let componentInfo = [
       {
         name: 'List Props',
         infoArray: [
@@ -145,7 +150,7 @@ class ListsPage extends React.Component {
         name: 'ListItem Props',
         infoArray: [
           {
-            name: 'disableTouchTap',
+            name: 'disabled',
             type: 'bool',
             header: 'default: false',
             desc: 'If true, the list-item will not be clickable and will not display hover affects. This is automatically disabled if leftCheckbox or rightToggle is set.'
@@ -213,6 +218,17 @@ class ListsPage extends React.Component {
             desc: 'Can be 1 or 2. This is the number of secondary text lines before ellipsis will show.'
           }
         ]
+      },
+      {
+        name: 'ListItem Events',
+        infoArray: [
+          {
+            name: 'onTouchTap',
+            type: 'function(e)',
+            header: 'optional',
+            desc: 'Called when the ListItem is touched/tapped.'
+          }
+        ]
       }
     ];
 
@@ -224,7 +240,7 @@ class ListsPage extends React.Component {
 
         <MobileTearSheet>
           <List>
-            <ListItem leftIcon={<ContentInbox />}>Inbox</ListItem>
+          <ListItem leftIcon={<ContentInbox />}>Inbox</ListItem>
             <ListItem leftIcon={<ActionGrade />}>Starred</ListItem>
             <ListItem leftIcon={<ContentSend />}>Sent mail</ListItem>
             <ListItem leftIcon={<ContentDrafts />}>Drafts</ListItem>

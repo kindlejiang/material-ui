@@ -1,13 +1,15 @@
-var React = require('react');
-var StylePropable = require('./mixins/style-propable');
-var Transitions = require('./styles/transitions');
-var ClickAwayable = require('./mixins/click-awayable');
-var KeyCode = require('./utils/key-code');
-var DropDownArrow = require('./svg-icons/drop-down-arrow');
-var Paper = require('./paper');
-var Menu = require('./menu/menu');
-var ClearFix = require('./clearfix');
-var DropDownMenu = React.createClass({
+let React = require('react');
+let StylePropable = require('./mixins/style-propable');
+let Transitions = require('./styles/transitions');
+let ClickAwayable = require('./mixins/click-awayable');
+let KeyCode = require('./utils/key-code');
+let DropDownArrow = require('./svg-icons/navigation/arrow-drop-down');
+let Paper = require('./paper');
+let Menu = require('./menu/menu');
+let ClearFix = require('./clearfix');
+
+
+let DropDownMenu = React.createClass({
 
   mixins: [StylePropable, ClickAwayable],
 
@@ -32,7 +34,7 @@ var DropDownMenu = React.createClass({
     selectedIndex: React.PropTypes.number
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       autoWidth: true,
       valueMember:'payload',
@@ -40,7 +42,7 @@ var DropDownMenu = React.createClass({
     };
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       open: false,
       isHovered: false,
@@ -48,16 +50,16 @@ var DropDownMenu = React.createClass({
     };
   },
 
-  componentClickAway: function() {
+  componentClickAway() {
     this.setState({open:false});
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     if (this.props.autoWidth) this._setWidth();
     if (this.props.hasOwnProperty('selectedIndex')) this._setSelectedIndex(this.props);
   },
 
-  componentWillReceiveProps: function(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (nextProps.hasOwnProperty('value') || nextProps.hasOwnProperty('valueLink')) {
       return;
     } else if (nextProps.hasOwnProperty('selectedIndex')) {
@@ -65,18 +67,18 @@ var DropDownMenu = React.createClass({
     }
  },
 
-  getSpacing: function() {
+  getSpacing() {
     return this.context.muiTheme.spacing;
   },
 
-  getTextColor: function() {
+  getTextColor() {
     return this.context.muiTheme.palette.textColor;
   },
 
-  getStyles: function(){
-    var accentColor = this.context.muiTheme.component.dropDownMenu.accentColor;
-    var backgroundColor = this.context.muiTheme.component.menu.backgroundColor;
-    var styles = {
+  getStyles(){
+    let accentColor = this.context.muiTheme.component.dropDownMenu.accentColor;
+    let backgroundColor = this.context.muiTheme.component.menu.backgroundColor;
+    let styles = {
       root: {
         transition: Transitions.easeOut(),
         position: 'relative',
@@ -135,19 +137,19 @@ var DropDownMenu = React.createClass({
     return styles;
   },
 
-  getInputNode: function() {
-    var root = this.refs.root;
-    var item = this.props.menuItems[this.state.selectedIndex];
+  getInputNode() {
+    let root = this.refs.root;
+    let item = this.props.menuItems[this.state.selectedIndex];
     if (item)
       root.value = item[this.props.displayMember];
     return root;
   },
 
-  render: function() {
-    var _this = this;
-    var styles = this.getStyles();
-    var selectedIndex = this.state.selectedIndex;
-    var displayValue = "";
+  render() {
+    let _this = this;
+    let styles = this.getStyles();
+    let selectedIndex = this.state.selectedIndex;
+    let displayValue = "";
     if (selectedIndex) {
       if (process.env.NODE_ENV !== 'production') {
         console.assert(!!this.props.menuItems[selectedIndex], 'SelectedIndex of ' + selectedIndex + ' does not exist in menuItems.');
@@ -156,18 +158,18 @@ var DropDownMenu = React.createClass({
     else {
       if (this.props.valueMember && (this.props.valueLink || this.props.value))
       {
-        var value = this.props.value || this.props.valueLink.value;
-        for (var i in this.props.menuItems)
+        let value = this.props.value || this.props.valueLink.value;
+        for (let i in this.props.menuItems)
           if (this.props.menuItems[i][this.props.valueMember] === value)
             selectedIndex = i;
       }
     }
 
-    var selectedItem = this.props.menuItems[selectedIndex];
+    let selectedItem = this.props.menuItems[selectedIndex];
     if (selectedItem)
       displayValue = selectedItem[this.props.displayMember];
 
-    var menuItems = this.props.menuItems.map(function(item){
+    let menuItems = this.props.menuItems.map((item) => {
       item.text = item[_this.props.displayMember];
       item.payload = item[_this.props.valueMember];
       return item;
@@ -210,16 +212,16 @@ var DropDownMenu = React.createClass({
     );
   },
 
-  _setWidth: function() {
-    var el = React.findDOMNode(this);
-    var menuItemsDom = React.findDOMNode(this.refs.menuItems);
+  _setWidth() {
+    let el = React.findDOMNode(this);
+    let menuItemsDom = React.findDOMNode(this.refs.menuItems);
     if (!this.props.style || !this.props.style.hasOwnProperty('width')) {
       el.style.width = menuItemsDom.offsetWidth + 'px';
     }
   },
 
-  _setSelectedIndex: function(props) {
-    var selectedIndex = props.selectedIndex;
+  _setSelectedIndex(props) {
+    let selectedIndex = props.selectedIndex;
 
     if (process.env.NODE_ENV !== 'production' && selectedIndex < 0) {
       console.warn('Cannot set selectedIndex to a negative index.', selectedIndex);
@@ -228,11 +230,11 @@ var DropDownMenu = React.createClass({
     this.setState({selectedIndex: (selectedIndex > -1) ? selectedIndex : 0});
   },
 
-  _onControlClick: function() {
+  _onControlClick() {
     this.setState({ open: !this.state.open });
   },
 
-  _onKeyDown: function(e) {
+  _onKeyDown(e) {
     switch(e.which) {
       case KeyCode.UP:
         if (!this.state.open)
@@ -258,9 +260,9 @@ var DropDownMenu = React.createClass({
     e.preventDefault();
   },
 
-  _onMenuItemClick: function(e, key, payload) {
+  _onMenuItemClick(e, key, payload) {
     if (this.props.onChange && this.state.selectedIndex !== key) {
-      var selectedItem = this.props.menuItems[key];
+      let selectedItem = this.props.menuItems[key];
       if (selectedItem)
         e.target.value = selectedItem[this.props.valueMember];
 
@@ -278,23 +280,23 @@ var DropDownMenu = React.createClass({
     });
   },
 
-  _onMenuRequestClose: function() {
+  _onMenuRequestClose() {
     this.setState({open:false});
   },
 
-  _handleMouseOver: function() {
+  _handleMouseOver() {
     this.setState({isHovered: true});
   },
 
-  _handleMouseOut: function() {
+  _handleMouseOut() {
     this.setState({isHovered: false});
   },
 
-  _selectPreviousItem: function() {
+  _selectPreviousItem() {
     this.setState({selectedIndex: Math.max(this.state.selectedIndex - 1, 0)});
   },
 
-  _selectNextItem: function() {
+  _selectNextItem() {
     this.setState({selectedIndex: Math.min(this.state.selectedIndex + 1, this.props.menuItems.length - 1)});
   }
 

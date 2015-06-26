@@ -1,20 +1,22 @@
-var React = require('react');
-var StylePropable = require('./mixins/style-propable');
-var Transitions = require('./styles/transitions');
-var ColorManipulator = require('./utils/color-manipulator');
-var EnhancedButton = require('./enhanced-button');
-var FontIcon = require('./font-icon');
-var Paper = require('./paper');
+let React = require('react');
+let StylePropable = require('./mixins/style-propable');
+let Transitions = require('./styles/transitions');
+let ColorManipulator = require('./utils/color-manipulator');
+let EnhancedButton = require('./enhanced-button');
+let FontIcon = require('./font-icon');
+let Paper = require('./paper');
 
-var getZDepth = function(disabled) {
-  var zDepth = disabled ? 0 : 2;
+
+let getZDepth = function(disabled) {
+  let zDepth = disabled ? 0 : 2;
   return {
     zDepth: zDepth,
     initialZDepth: zDepth
   };
 };
 
-var RaisedButton = React.createClass({
+
+let RaisedButton = React.createClass({
 
   mixins: [StylePropable],
 
@@ -35,55 +37,56 @@ var RaisedButton = React.createClass({
     secondary: React.PropTypes.bool
   },
 
-  getInitialState: function() {
-    var zDepth = this.props.disabled ? 0 : 2;
+  getInitialState() {
+    let zDepth = this.props.disabled ? 0 : 2;
     return {
-      zDepth: zDepth,
-      initialZDepth: zDepth,
       hovered: false,
+      initialZDepth: zDepth,
+      touch: false,
+      zDepth: zDepth
     };
   },
 
-  componentWillMount: function() {
+  componentWillMount() {
     this.setState(getZDepth(this.props.disabled));
   },
 
-  componentWillReceiveProps: function(newProps) {
-    if(newProps.disabled !== this.props.disabled){
+  componentWillReceiveProps(newProps) {
+    if (newProps.disabled !== this.props.disabled){
       this.setState(getZDepth(newProps.disabled));
     }
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     if (process.env.NODE_ENV !== 'production') {
       if (this.props.iconClassName && this.props.children) {
-        var warning = 'You have set both an iconClassName and a child icon. ' +
-                      'It is recommended you use only one method when adding ' +
-                      'icons to FloatingActionButtons.';
+        let warning = 'You have set both an iconClassName and a child icon. ' +
+          'It is recommended you use only one method when adding ' +
+          'icons to FloatingActionButtons.';
         console.warn(warning);
       }
     }
   },
 
-  _getBackgroundColor: function() {
+  _getBackgroundColor() {
     return  this.props.disabled ? this.getTheme().disabledColor :
-            this.props.secondary ? this.getTheme().secondaryColor :
-            this.getTheme().color;
+      this.props.secondary ? this.getTheme().secondaryColor :
+      this.getTheme().color;
   },
 
 
-  getTheme: function() {
+  getTheme() {
     return this.context.muiTheme.component.floatingActionButton;
   },
 
-  _getIconColor: function() {
+  _getIconColor() {
     return  this.props.disabled ? this.getTheme().disabledTextColor :
-            this.props.secondary ? this.getTheme().secondaryIconColor :
-            this.getTheme().iconColor;
+      this.props.secondary ? this.getTheme().secondaryIconColor :
+      this.getTheme().iconColor;
   },
 
-  getStyles: function() {
-    var styles = {
+  getStyles() {
+    let styles = {
       root: {
         transition: Transitions.easeOut(),
         display: 'inline-block'
@@ -127,17 +130,17 @@ var RaisedButton = React.createClass({
     return styles;
   },
 
-  render: function() {
-    var {
+  render() {
+    let {
       disabled,
       icon,
       mini,
       secondary,
       ...other } = this.props;
 
-    var styles = this.getStyles();
+    let styles = this.getStyles();
 
-    var iconElement;
+    let iconElement;
     if (this.props.iconClassName) {
       iconElement =
         <FontIcon
@@ -148,9 +151,9 @@ var RaisedButton = React.createClass({
             this.props.iconStyle)}/>
     }
 
-    var rippleColor = styles.icon.color;
+    let rippleColor = styles.icon.color;
 
-    var buttonEventHandlers = disabled ? null : {
+    let buttonEventHandlers = disabled ? null : {
       onMouseDown: this._handleMouseDown,
       onMouseUp: this._handleMouseUp,
       onMouseOut: this._handleMouseOut,
@@ -191,7 +194,7 @@ var RaisedButton = React.createClass({
     );
   },
 
-  _handleMouseDown: function(e) {
+  _handleMouseDown(e) {
     //only listen to left clicks
     if (e.button === 0) {
       this.setState({ zDepth: this.state.initialZDepth + 1 });
@@ -199,32 +202,37 @@ var RaisedButton = React.createClass({
     if (this.props.onMouseDown) this.props.onMouseDown(e);
   },
 
-  _handleMouseUp: function(e) {
+  _handleMouseUp(e) {
     this.setState({ zDepth: this.state.initialZDepth });
     if (this.props.onMouseUp) this.props.onMouseUp(e);
   },
 
-  _handleMouseOut: function(e) {
+  _handleMouseOut(e) {
     if (!this.refs.container.isKeyboardFocused()) this.setState({ zDepth: this.state.initialZDepth, hovered: false });
     if (this.props.onMouseOut) this.props.onMouseOut(e);
   },
 
-  _handleMouseOver: function(e) {
-    if (!this.refs.container.isKeyboardFocused()) this.setState({hovered: true});
+  _handleMouseOver(e) {
+    if (!this.refs.container.isKeyboardFocused() && !this.state.touch) {
+      this.setState({hovered: true});
+    }
     if (this.props.onMouseOver) this.props.onMouseOver(e);
   },
 
-  _handleTouchStart: function(e) {
-    this.setState({ zDepth: this.state.initialZDepth + 1 });
+  _handleTouchStart(e) {
+    this.setState({
+      touch: true,
+      zDepth: this.state.initialZDepth + 1
+    });
     if (this.props.onTouchStart) this.props.onTouchStart(e);
   },
 
-  _handleTouchEnd: function(e) {
+  _handleTouchEnd(e) {
     this.setState({ zDepth: this.state.initialZDepth });
     if (this.props.onTouchEnd) this.props.onTouchEnd(e);
   },
 
-  _handleKeyboardFocus: function(e, keyboardFocused) {
+  _handleKeyboardFocus(e, keyboardFocused) {
     if (keyboardFocused && !this.props.disabled) {
       this.setState({ zDepth: this.state.initialZDepth + 1 });
       React.findDOMNode(this.refs.overlay).style.backgroundColor = ColorManipulator.fade(this.getStyles().icon.color, 0.4);
@@ -232,7 +240,7 @@ var RaisedButton = React.createClass({
       this.setState({ zDepth: this.state.initialZDepth });
       React.findDOMNode(this.refs.overlay).style.backgroundColor = 'transparent';
     }
-  },
+  }
 
 });
 

@@ -1,9 +1,10 @@
-var React = require('react');
-var StylePropable = require('./mixins/style-propable');
-var Transitions = require('./styles/transitions');
-var Colors = require('./styles/colors');
+let React = require('react');
+let StylePropable = require('./mixins/style-propable');
+let Transitions = require('./styles/transitions');
+let Colors = require('./styles/colors');
 
-var Overlay = React.createClass({
+
+let Overlay = React.createClass({
 
   mixins: [StylePropable],
 
@@ -13,24 +14,29 @@ var Overlay = React.createClass({
     transitionEnabled: React.PropTypes.bool
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       autoLockScrolling: true,
       transitionEnabled: true
     };
   },
 
-  componentDidUpdate: function() {
+  componentDidUpdate() {
     if (this.props.autoLockScrolling) (this.props.show) ? this._preventScrolling() : this._allowScrolling();
   },
 
+
+  componentWillUnmount() {
+    this.allowScrolling();
+  },
+
   setOpacity(opacity) {
-    var overlay = React.findDOMNode(this);
+    let overlay = React.findDOMNode(this);
     overlay.style.opacity = opacity;
   },
 
-  getStyles: function() {
-    var styles = {
+  getStyles() {
+    let styles = {
       root: {
         position: 'fixed',
         height: '100%',
@@ -63,36 +69,36 @@ var Overlay = React.createClass({
     return styles;
   },
 
-  render: function() {
+  render() {
 
-    var {
+    let {
       show,
       style,
       ...other
     } = this.props;
 
-    var styles = this.mergeAndPrefix(this.getStyles().root, this.props.style, this.props.show && this.getStyles().rootWhenShown)
+    let styles = this.mergeAndPrefix(this.getStyles().root, this.props.style, this.props.show && this.getStyles().rootWhenShown)
 
     return (
       <div {...other} style={styles} />
     );
   },
 
-  preventScrolling: function() {
+  preventScrolling() {
     if (!this.props.autoLockScrolling) this._preventScrolling();
   },
 
-  allowScrolling: function() {
+  allowScrolling() {
     if (!this.props.autoLockScrolling) this._allowScrolling();
   },
 
-  _preventScrolling: function() {
-    var body = document.getElementsByTagName('body')[0];
+  _preventScrolling() {
+    let body = document.getElementsByTagName('body')[0];
     body.style.overflow = 'hidden';
   },
 
-  _allowScrolling: function() {
-    var body = document.getElementsByTagName('body')[0];
+  _allowScrolling() {
+    let body = document.getElementsByTagName('body')[0];
     body.style.overflow = '';
   }
 

@@ -1,5 +1,6 @@
-var React = require('react');
-var classNames = require('classnames');
+let React = require('react');
+let classNames = require('classnames');
+
 
 module.exports = {
 
@@ -7,14 +8,14 @@ module.exports = {
     className: React.PropTypes.string
   },
 
-  getDefaultProps: function(){
+  getDefaultProps(){
     return {
       className: ''
     }
   },
 
-  getClasses: function(initialClasses, additionalClassObj) {
-    var classString = '';
+  getClasses(initialClasses, additionalClassObj) {
+    let classString = '';
 
     //Initialize the classString with the classNames that were passed in
     if (this.props.className.length) classString += ' ' + this.props.className;
@@ -22,7 +23,8 @@ module.exports = {
     //Add in initial classes
     if (typeof initialClasses === 'object') {
       classString += ' ' + classNames(initialClasses);
-    } else {
+    }
+    else {
       classString += ' ' + initialClasses;
     }
 
@@ -33,11 +35,11 @@ module.exports = {
     return classNames(this.getClassSet(classString));
   },
 
-  getClassSet: function(classString) {
-    var classObj = {};
+  getClassSet(classString) {
+    let classObj = {};
 
     if (classString) {
-      classString.split(' ').forEach(function(className) {
+      classString.split(' ').forEach((className) => {
         if (className) classObj[className] = true;
       });
     }

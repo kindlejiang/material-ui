@@ -1,9 +1,9 @@
-var React = require('react');
-var StylePropable = require('./mixins/style-propable');
-var Spacing = require('./styles/spacing');
-var Transitions = require('./styles/transitions');
+let React = require('react');
+let StylePropable = require('./mixins/style-propable');
+let Transitions = require('./styles/transitions');
 
-var FontIcon = React.createClass({
+
+let FontIcon = React.createClass({
 
   mixins: [StylePropable],
 
@@ -18,14 +18,14 @@ var FontIcon = React.createClass({
     onMouseOver: React.PropTypes.func
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       hovered: false
     };
   },
 
-  render: function() {
-    var {
+  render() {
+    let {
       color,
       hoverColor,
       onMouseOut,
@@ -34,14 +34,15 @@ var FontIcon = React.createClass({
       ...other
     } = this.props;
 
-    var offColor = color ? color :
+    let spacing = this.context.muiTheme.spacing;
+    let offColor = color ? color :
       style && style.color ? style.color :
       this.context.muiTheme.palette.textColor;
-    var onColor = hoverColor ? hoverColor : offColor;
+    let onColor = hoverColor ? hoverColor : offColor;
 
-    var mergedStyles = this.mergeAndPrefix({
+    let mergedStyles = this.mergeAndPrefix({
       position: 'relative',
-      fontSize: Spacing.iconSize,
+      fontSize: spacing.iconSize,
       display: 'inline-block',
       userSelect: 'none',
       transition: Transitions.easeOut()
@@ -58,14 +59,14 @@ var FontIcon = React.createClass({
     );
   },
 
-  _handleMouseOut: function(e) {
+  _handleMouseOut(e) {
     this.setState({hovered: false});
     if (this.props.onMouseOut) {
       this.props.onMouseOut(e);
     }
   },
 
-  _handleMouseOver: function(e) {
+  _handleMouseOver(e) {
     this.setState({hovered: true});
     if (this.props.onMouseOver) {
       this.props.onMouseOver(e);

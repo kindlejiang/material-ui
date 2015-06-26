@@ -1,8 +1,7 @@
-var React = require('react');
-var mui = require('mui');
-var RaisedButton = mui.RaisedButton;
-var Snackbar = mui.Snackbar;
-var ComponentDoc = require('../../component-doc.jsx');
+let React = require('react');
+let { RaisedButton, Snackbar } = require('material-ui');
+let ComponentDoc = require('../../component-doc');
+
 
 class SnackbarPage extends React.Component {
 
@@ -12,18 +11,18 @@ class SnackbarPage extends React.Component {
   }
 
   render() {
-    var code =
+    let code =
       '<Snackbar\n' +
       '  message="Event added to your calendar"\n' +
       '  action="undo"\n' +
       '  onActionTouchTap={this._handleAction}/>\n\n' +
       '//Somewhere in our code\n' +
-      '_handleAction: function() {\n' +
+      '_handleAction() {\n' +
       '  //We can add more code to this function, but for now we\'ll just include an alert.\n' +
       '  alert("We removed the event from your calendar.");\n' +
       '}';
 
-    var componentInfo = [
+    let componentInfo = [
       {
         name: 'Props',
         infoArray: [

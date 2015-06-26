@@ -1,10 +1,11 @@
-var React = require('react');
-var StylePropable = require('./mixins/style-propable');
-var Transitions = require('./styles/transitions');
-var Paper = require('./paper');
-var EnhancedSwitch = require('./enhanced-switch');
+let React = require('react');
+let StylePropable = require('./mixins/style-propable');
+let Transitions = require('./styles/transitions');
+let Paper = require('./paper');
+let EnhancedSwitch = require('./enhanced-switch');
 
-var Toggle = React.createClass({
+
+let Toggle = React.createClass({
 
   mixins: [StylePropable],
 
@@ -20,24 +21,24 @@ var Toggle = React.createClass({
     defaultToggled: React.PropTypes.bool
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       switched:
         this.props.toggled ||
         this.props.defaultToggled ||
         (this.props.valueLink && this.props.valueLink.value) ||
-        false,
+        false
     }
   },
 
-  getTheme: function() {
+  getTheme() {
     return this.context.muiTheme.component.toggle;
   },
 
-  getStyles: function() {
-    var toggleSize = 20;
-    var toggleTrackWidth = 36;
-    var styles = {
+  getStyles() {
+    let toggleSize = 20;
+    let toggleTrackWidth = 36;
+    let styles = {
       icon: {
         width: 36,
         padding: '4px 0px 6px 2px'
@@ -80,25 +81,26 @@ var Toggle = React.createClass({
         color: this.props.disabled ? this.getTheme().labelDisabledColor : this.getTheme().labelColor
       }
     };
+
     return styles;
   },
 
-  render: function() {
-    var {
+  render() {
+    let {
       onToggle,
       ...other
     } = this.props;
 
-    var styles = this.getStyles();
+    let styles = this.getStyles();
 
-    var trackStyles = this.mergeAndPrefix(
+    let trackStyles = this.mergeAndPrefix(
       styles.track,
       this.props.trackStyle,
       this.state.switched && styles.trackWhenSwitched,
       this.props.disabled && styles.trackWhenDisabled
     );
 
-    var thumbStyles = this.mergeAndPrefix(
+    let thumbStyles = this.mergeAndPrefix(
       styles.thumb,
       this.props.thumbStyle,
       this.state.switched && styles.thumbWhenSwitched,
@@ -108,35 +110,35 @@ var Toggle = React.createClass({
     if (this.state.switched) {
       thumbStyles.marginLeft = '-' + thumbStyles.width;
     }
-    
-    var toggleElemetStyles = this.mergeAndPrefix(styles.toggleElemet, this.props.elementStyle);
 
-    var toggleElement = (
+    let toggleElemetStyles = this.mergeAndPrefix(styles.toggleElemet, this.props.elementStyle);
+
+    let toggleElement = (
       <div style={toggleElemetStyles}>
         <div style={trackStyles} />
         <Paper style={thumbStyles} circle={true} zDepth={1} />
       </div>
     );
 
-    var customRippleStyle = this.mergeAndPrefix({
+    let customRippleStyle = this.mergeAndPrefix({
       top: '-10',
       left: '-10'
     }, this.props.rippleStyle);
 
-    var rippleColor =  this.state.switched ?
+    let rippleColor =  this.state.switched ?
       this.getTheme().thumbOnColor : this.context.muiTheme.component.textColor;
 
-    var iconStyle = this.mergeAndPrefix(
+    let iconStyle = this.mergeAndPrefix(
       styles.icon,
       this.props.iconStyle
     );
 
-    var labelStyle = this.mergeAndPrefix(
+    let labelStyle = this.mergeAndPrefix(
       styles.label,
       this.props.labelStyle
     );
 
-    var enhancedSwitchProps = {
+    let enhancedSwitchProps = {
       ref: "enhancedSwitch",
       inputType: "checkbox",
       switchElement: toggleElement,
@@ -162,19 +164,19 @@ var Toggle = React.createClass({
     );
   },
 
-  isToggled: function() {
+  isToggled() {
     return this.refs.enhancedSwitch.isSwitched();
   },
 
-  setToggled: function(newToggledValue) {
+  setToggled(newToggledValue) {
     this.refs.enhancedSwitch.setSwitched(newToggledValue);
   },
 
-  _handleToggle: function(e, isInputChecked) {
+  _handleToggle(e, isInputChecked) {
     if (this.props.onToggle) this.props.onToggle(e, isInputChecked);
   },
 
-  _handleStateChange: function(newSwitched) {
+  _handleStateChange(newSwitched) {
     this.setState({switched: newSwitched});
   }
 

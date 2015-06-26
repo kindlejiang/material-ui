@@ -1,18 +1,19 @@
-var React = require('react');
-var Styles = require('../styles');
+let React = require('react');
+let Styles = require('../styles');
 
-var CardActions = React.createClass({
-  getStyles: function () {
+let CardActions = React.createClass({
+  getStyles() {
     return {
       root: {
         padding: 8
       }
     }
   },
-  render: function () {
-    var styles = this.getStyles();
 
-    var children = React.Children.map(this.props.children, function (child) {
+  render() {
+    let styles = this.getStyles();
+
+    let children = React.Children.map(this.props.children, (child) => {
       return React.cloneElement(child, {
         style: {marginRight: 8}
       });

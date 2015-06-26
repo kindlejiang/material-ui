@@ -1,14 +1,14 @@
 {
   "name": "material-ui",
   "author": "Call-em-all Engineering Team",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Material Design UI components built with React",
   "main": "./lib",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild": "rm -rf lib",
-    "jshint": "jsxhint --harmony src/** --exclude src/utils/modernizr.custom.js",
-    "build": "npm run jshint && babel --stage 1 ./src --out-dir ./lib",
+    "eslint": "eslint src",
+    "build": "npm run eslint && babel --stage 1 ./src --out-dir ./lib",
     "prepublish": "npm run build"
   },
   "keywords": [
@@ -37,8 +37,9 @@
   },
   "devDependencies": {
     "babel": "^5.4.3",
-    "jsxhint": "^0.15.0",
-    "react": "^0.13.3",
+    "babel-eslint": "^3.1.17",
+    "eslint": "^0.23.0",
+    "eslint-plugin-react": "^2.5.2",
     "react-router": "^0.13.3",
     "react-tap-event-plugin": "^0.1.6"
   }

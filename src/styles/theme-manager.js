@@ -1,38 +1,45 @@
-var Spacing = require('./spacing');
-var Extend = require('../utils/extend');
+let Extend = require('../utils/extend');
 
-var Types = {
+
+const Types = {
   LIGHT: require('./themes/light-theme'),
   DARK: require('./themes/dark-theme')
 };
 
-var ThemeManager = function() {
+
+let ThemeManager = () => {
   return {
     types: Types,
     template: Types.LIGHT,
 
-    spacing: Spacing,
+    spacing: Types.LIGHT.spacing,
     contentFontFamily: 'Roboto, sans-serif',
 
     palette: Types.LIGHT.getPalette(),
     component: Types.LIGHT.getComponentThemes(Types.LIGHT.getPalette()),
 
-    getCurrentTheme: function() {
+    getCurrentTheme() {
       return this;
     },
 
     // Component gets updated to reflect palette changes.
-    setTheme: function(newTheme) {
+    setTheme(newTheme) {
+      this.setSpacing(newTheme.spacing);
       this.setPalette(newTheme.getPalette());
       this.setComponentThemes(newTheme.getComponentThemes(newTheme.getPalette()));
     },
 
-    setPalette: function(newPalette) {
+    setSpacing(newSpacing) {
+      this.spacing = Extend(this.spacing, newSpacing);
+      this.component = Extend(this.component, this.template.getComponentThemes(this.palette, this.spacing));
+    },
+
+    setPalette(newPalette) {
       this.palette = Extend(this.palette, newPalette);
       this.component = Extend(this.component, this.template.getComponentThemes(this.palette));
     },
 
-    setComponentThemes: function(overrides) {
+    setComponentThemes(overrides) {
       this.component = Extend(this.component, overrides);
     }
   };

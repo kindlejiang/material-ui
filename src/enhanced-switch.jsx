@@ -1,16 +1,16 @@
-var React = require('react');
-var KeyCode = require('./utils/key-code');
-var StylePropable = require('./mixins/style-propable');
-var Transitions = require('./styles/transitions');
-var UniqueId = require('./utils/unique-id');
-var WindowListenable = require('./mixins/window-listenable');
-var Spacing = require('./styles/spacing');
-var ClearFix = require('./clearfix');
-var FocusRipple = require('./ripples/focus-ripple');
-var TouchRipple = require('./ripples/touch-ripple');
-var Paper = require('./paper');
+let React = require('react');
+let KeyCode = require('./utils/key-code');
+let StylePropable = require('./mixins/style-propable');
+let Transitions = require('./styles/transitions');
+let UniqueId = require('./utils/unique-id');
+let WindowListenable = require('./mixins/window-listenable');
+let ClearFix = require('./clearfix');
+let FocusRipple = require('./ripples/focus-ripple');
+let TouchRipple = require('./ripples/touch-ripple');
+let Paper = require('./paper');
 
-var EnhancedSwitch = React.createClass({
+
+let EnhancedSwitch = React.createClass({
 
   mixins: [WindowListenable, StylePropable],
 
@@ -47,14 +47,14 @@ var EnhancedSwitch = React.createClass({
     'keyup': '_handleWindowKeyup'
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       isKeyboardFocused: false,
       parentWidth: 100,
     };
   },
 
-  getEvenWidth: function(){
+  getEvenWidth(){
     return (
       parseInt(window
         .getComputedStyle(React.findDOMNode(this.refs.root))
@@ -62,8 +62,8 @@ var EnhancedSwitch = React.createClass({
     );
   },
 
-  componentDidMount: function() {
-    var inputNode = React.findDOMNode(this.refs.checkbox);
+  componentDidMount() {
+    let inputNode = React.findDOMNode(this.refs.checkbox);
     if (!this.props.switched ||
         inputNode.checked != this.props.switched) this.props.onParentShouldUpdate(inputNode.checked);
 
@@ -72,18 +72,18 @@ var EnhancedSwitch = React.createClass({
     this._handleResize();
   },
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     window.removeEventListener("resize", this._handleResize);
   },
 
-  componentWillReceiveProps: function(nextProps) {
-    var hasCheckedLinkProp = nextProps.hasOwnProperty('checkedLink');
-    var hasCheckedProp = nextProps.hasOwnProperty('checked');
-    var hasToggledProp = nextProps.hasOwnProperty('toggled');
-    var hasNewDefaultProp =
+  componentWillReceiveProps(nextProps) {
+    let hasCheckedLinkProp = nextProps.hasOwnProperty('checkedLink');
+    let hasCheckedProp = nextProps.hasOwnProperty('checked');
+    let hasToggledProp = nextProps.hasOwnProperty('toggled');
+    let hasNewDefaultProp =
       (nextProps.hasOwnProperty('defaultSwitched') &&
       (nextProps.defaultSwitched != this.props.defaultSwitched));
-    var newState = {};
+    let newState = {};
 
     if (hasCheckedProp) {
       newState.switched = nextProps.checked;
@@ -98,15 +98,15 @@ var EnhancedSwitch = React.createClass({
     if (newState.switched !== undefined && (newState.switched != this.props.switched)) this.props.onParentShouldUpdate(newState.switched);
   },
 
-  getTheme: function() {
+  getTheme() {
     return this.context.muiTheme.palette;
   },
 
-  getStyles: function() {
-    var switchWidth = 60 - Spacing.desktopGutterLess;
-    var labelWidth = 'calc(100% - 60px)';
-
-    var styles = {
+  getStyles() {
+    let spacing = this.context.muiTheme.spacing;
+    let switchWidth = 60 - spacing.desktopGutterLess;
+    let labelWidth = 'calc(100% - 60px)';
+    let styles = {
       root: {
         position: 'relative',
         cursor: this.props.disabled ? 'default' : 'pointer',
@@ -135,7 +135,7 @@ var EnhancedSwitch = React.createClass({
       label: {
         float: 'left',
         position: 'relative',
-        display: 'table-column',
+        display: 'block',
         width: labelWidth,
         lineHeight: '24px',
         color: this.getTheme().textColor
@@ -144,12 +144,12 @@ var EnhancedSwitch = React.createClass({
         transition: Transitions.easeOut(),
         float: 'left',
         position: 'relative',
-        display: 'table-column',
+        display: 'block',
         width: switchWidth,
         marginRight: (this.props.labelPosition == 'right') ?
-          Spacing.desktopGutterLess : 0,
+          spacing.desktopGutterLess : 0,
         marginLeft: (this.props.labelPosition == 'left') ?
-          Spacing.desktopGutterLess : 0
+          spacing.desktopGutterLess : 0
       },
       ripple: {
         height: '200%',
@@ -161,8 +161,8 @@ var EnhancedSwitch = React.createClass({
     return styles;
   },
 
-  render: function() {
-    var {
+  render() {
+    let {
       type,
       name,
       value,
@@ -182,11 +182,11 @@ var EnhancedSwitch = React.createClass({
       ...other
     } = this.props;
 
-    var styles = this.getStyles();
+    let styles = this.getStyles();
 
-    var wrapStyles = this.mergeAndPrefix(styles.wrap, this.props.iconStyle);
-    var rippleStyle = this.mergeAndPrefix(styles.ripple, this.props.rippleStyle);
-    var rippleColor = this.props.hasOwnProperty('rippleColor') ? this.props.rippleColor :
+    let wrapStyles = this.mergeAndPrefix(styles.wrap, this.props.iconStyle);
+    let rippleStyle = this.mergeAndPrefix(styles.ripple, this.props.rippleStyle);
+    let rippleColor = this.props.hasOwnProperty('rippleColor') ? this.props.rippleColor :
                       this.getTheme().primary1Color;
 
     if (this.props.thumbStyle) {
@@ -194,17 +194,17 @@ var EnhancedSwitch = React.createClass({
       wrapStyles.marginRight /= 2;
     }
 
-    var inputId = this.props.id || UniqueId.generate();
+    let inputId = this.props.id || UniqueId.generate();
 
-    var labelStyle = this.mergeAndPrefix(styles.label, this.props.labelStyle);
+    let labelStyle = this.mergeAndPrefix(styles.label, this.props.labelStyle);
 
-    var labelElement = this.props.label ? (
+    let labelElement = this.props.label ? (
       <label style={labelStyle} htmlFor={inputId}>
         {this.props.label}
       </label>
     ) : null;
 
-    var inputProps = {
+    let inputProps = {
       ref: "checkbox",
       type: this.props.inputType,
       style: this.mergeAndPrefix(styles.input),
@@ -215,9 +215,9 @@ var EnhancedSwitch = React.createClass({
       onFocus: this._handleFocus
     };
 
-    var hideTouchRipple = this.props.disabled || disableTouchRipple;
+    let hideTouchRipple = this.props.disabled || disableTouchRipple;
 
-    if(!hideTouchRipple) {
+    if (!hideTouchRipple) {
       inputProps.onMouseUp = this._handleMouseUp;
       inputProps.onMouseDown = this._handleMouseDown;
       inputProps.onMouseOut = this._handleMouseOut;
@@ -229,13 +229,13 @@ var EnhancedSwitch = React.createClass({
       inputProps.onChange = this._handleChange;
     }
 
-    var inputElement = (
+    let inputElement = (
       <input
         {...other}
         {...inputProps}/>
     );
 
-    var touchRipple = (
+    let touchRipple = (
       <TouchRipple
         ref="touchRipple"
         key="touchRipple"
@@ -244,7 +244,7 @@ var EnhancedSwitch = React.createClass({
         centerRipple={true} />
     );
 
-    var focusRipple = (
+    let focusRipple = (
       <FocusRipple
         key="focusRipple"
         innerStyle={rippleStyle}
@@ -252,14 +252,14 @@ var EnhancedSwitch = React.createClass({
         show={this.state.isKeyboardFocused} />
     );
 
-    var ripples = [
+    let ripples = [
       hideTouchRipple ? null : touchRipple,
       this.props.disabled || disableFocusRipple ? null : focusRipple
     ];
 
     // If toggle component (indicated by whether the style includes thumb) manually lay out
     // elements in order to nest ripple elements
-    var switchElement = !this.props.thumbStyle ? (
+    let switchElement = !this.props.thumbStyle ? (
         <div style={wrapStyles}>
           {this.props.switchElement}
           {ripples}
@@ -271,10 +271,10 @@ var EnhancedSwitch = React.createClass({
         </div>
     );
 
-    var labelPositionExist = this.props.labelPosition;
+    let labelPositionExist = this.props.labelPosition;
 
     // Position is left if not defined or invalid.
-    var elementsInOrder = (labelPositionExist &&
+    let elementsInOrder = (labelPositionExist &&
       (this.props.labelPosition.toUpperCase() === "RIGHT")) ? (
         <ClearFix style={this.mergeAndPrefix(styles.controls)}>
           {switchElement}
@@ -296,36 +296,36 @@ var EnhancedSwitch = React.createClass({
   },
 
 
-  isSwitched: function() {
+  isSwitched() {
     return React.findDOMNode(this.refs.checkbox).checked;
   },
 
   // no callback here because there is no event
-  setSwitched: function(newSwitchedValue) {
+  setSwitched(newSwitchedValue) {
     if (!this.props.hasOwnProperty('checked') || this.props.checked === false) {
       this.props.onParentShouldUpdate(newSwitchedValue);
       React.findDOMNode(this.refs.checkbox).checked = newSwitchedValue;
     } else if (process.env.NODE_ENV !== 'production') {
-      var message = 'Cannot call set method while checked is defined as a property.';
+      let message = 'Cannot call set method while checked is defined as a property.';
       console.error(message);
     }
   },
 
-  getValue: function() {
+  getValue() {
     return React.findDOMNode(this.refs.checkbox).value;
   },
 
-  isKeyboardFocused: function() {
+  isKeyboardFocused() {
     return this.state.isKeyboardFocused;
   },
 
-  _handleChange: function(e) {
+  _handleChange(e) {
     this._tabPressed = false;
     this.setState({
       isKeyboardFocused: false
     });
 
-    var isInputChecked = React.findDOMNode(this.refs.checkbox).checked;
+    let isInputChecked = React.findDOMNode(this.refs.checkbox).checked;
 
     if (!this.props.hasOwnProperty('checked')) this.props.onParentShouldUpdate(isInputChecked);
     if (this.props.onSwitch) this.props.onSwitch(e, isInputChecked);
@@ -339,41 +339,41 @@ var EnhancedSwitch = React.createClass({
 
   // Checkbox inputs only use SPACE to change their state. Using ENTER will
   // update the ui but not the input.
-  _handleWindowKeydown: function(e) {
+  _handleWindowKeydown(e) {
     if (e.keyCode == KeyCode.TAB) this._tabPressed = true;
     if (e.keyCode == KeyCode.SPACE && this.state.isKeyboardFocused) {
       this._handleChange(e);
     }
   },
 
-  _handleWindowKeyup: function(e) {
+  _handleWindowKeyup(e) {
     if (e.keyCode == KeyCode.SPACE && this.state.isKeyboardFocused) {
       this._handleChange(e);
     }
   },
 
-  _handleMouseDown: function(e) {
+  _handleMouseDown(e) {
     //only listen to left clicks
     if (e.button === 0) this.refs.touchRipple.start(e);
   },
 
-  _handleMouseUp: function() {
+  _handleMouseUp() {
     this.refs.touchRipple.end();
   },
 
-  _handleMouseOut: function() {
+  _handleMouseOut() {
     this.refs.touchRipple.end();
   },
 
-  _handleTouchStart: function(e) {
+  _handleTouchStart(e) {
     this.refs.touchRipple.start(e);
   },
 
-  _handleTouchEnd: function() {
+  _handleTouchEnd() {
     this.refs.touchRipple.end();
   },
 
-  _handleBlur: function(e) {
+  _handleBlur(e) {
     this.setState({
       isKeyboardFocused: false
     });
@@ -381,22 +381,22 @@ var EnhancedSwitch = React.createClass({
     if (this.props.onBlur) this.props.onBlur(e);
   },
 
-  _handleFocus: function(e) {
+  _handleFocus(e) {
     //setTimeout is needed becuase the focus event fires first
     //Wait so that we can capture if this was a keyboard focus
     //or touch focus
-    setTimeout(function() {
+    setTimeout(() => {
       if (this._tabPressed) {
         this.setState({
           isKeyboardFocused: true
         });
       }
-    }.bind(this), 150);
+    }, 150);
 
     if (this.props.onFocus) this.props.onFocus(e);
   },
 
-  _handleResize: function() {
+  _handleResize() {
     this.setState({parentWidth: this.getEvenWidth()});
   }
 

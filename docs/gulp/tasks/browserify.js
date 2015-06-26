@@ -17,13 +17,14 @@ var buffer       = require('vinyl-buffer');
 var sourcemaps   = require('gulp-sourcemaps');
 var babelify     = require('babelify');
 
-gulp.task('browserify', ['jshint'], function(callback) {
+gulp.task('browserify', ['eslint'], function(callback) {
 
   var bundleQueue = config.bundleConfigs.length;
 
   var browserifyThis = function(bundleConfig) {
 
     var bundler = browserify({
+
       // Required watchify args
       cache: {}, packageCache: {}, fullPaths: false,
       // Specify the entry point of your app
@@ -31,9 +32,11 @@ gulp.task('browserify', ['jshint'], function(callback) {
       // Add file extentions to make optional in your requires
       extensions: config.extensions,
       // Enable source maps, since they are only loaded on demand there is no need to disable
-      debug: true
-    }).transform(babelify.configure({stage: 1}));
+      debug: true,
+      // Material-UI Source path
+      paths: ['../src']
 
+    });
 
     var bundle = function() {
       // Log when bundling starts
@@ -56,7 +59,10 @@ gulp.task('browserify', ['jshint'], function(callback) {
         .on('end', reportFinished);
     };
 
-    if(global.isWatching) {
+    bundler.require('../src/index.js', {expose: 'material-ui'});
+    bundler.transform(babelify.configure({stage: 1}));
+
+    if (global.isWatching) {
       // Wrap with watchify and rebundle on changes
       bundler = watchify(bundler);
       // Rebundle on update
@@ -67,9 +73,9 @@ gulp.task('browserify', ['jshint'], function(callback) {
       // Log when bundling completes
       bundleLogger.end(bundleConfig.outputName);
 
-      if(bundleQueue) {
+      if (bundleQueue) {
         bundleQueue--;
-        if(bundleQueue === 0) {
+        if (bundleQueue === 0) {
           // If queue is empty, tell gulp the task is complete.
           // https://github.com/gulpjs/gulp/blob/master/docs/API.md#accept-a-callback
           callback();

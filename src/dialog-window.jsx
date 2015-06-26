@@ -1,14 +1,15 @@
-var React = require('react');
-var WindowListenable = require('./mixins/window-listenable');
-var CssEvent = require('./utils/css-event');
-var KeyCode = require('./utils/key-code');
-var StylePropable = require('./mixins/style-propable');
-var Transitions = require('./styles/transitions');
-var FlatButton = require('./flat-button');
-var Overlay = require('./overlay');
-var Paper = require('./paper');
+let React = require('react');
+let WindowListenable = require('./mixins/window-listenable');
+let CssEvent = require('./utils/css-event');
+let KeyCode = require('./utils/key-code');
+let StylePropable = require('./mixins/style-propable');
+let Transitions = require('./styles/transitions');
+let FlatButton = require('./flat-button');
+let Overlay = require('./overlay');
+let Paper = require('./paper');
 
-var DialogWindow = React.createClass({
+
+let DialogWindow = React.createClass({
 
   closeable: false,
 
@@ -36,7 +37,7 @@ var DialogWindow = React.createClass({
     'resize': '_positionDialog'
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       actions: [],
       repositionOnUpdate: true,
@@ -44,34 +45,34 @@ var DialogWindow = React.createClass({
     };
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       open: this.props.openImmediately || false
     };
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     this._positionDialog();
     if (this.props.openImmediately) {
       this.show();
     }
   },
 
-  componentDidUpdate: function(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     this._positionDialog();
     this._focusOnAction();
   },
 
-  getTheme: function() {
+  getTheme() {
     return this.context.muiTheme;
   },
 
-  getSpacing: function() {
+  getSpacing() {
     return this.context.muiTheme.spacing;
   },
 
-  getStyles: function() {
-    var styles = {
+  getStyles() {
+    let styles = {
       root: {
         position: 'fixed',
         boxSizing: 'border-box',
@@ -109,9 +110,9 @@ var DialogWindow = React.createClass({
     return styles;
   },
 
-  render: function() {
-    var actions = this._getActionsContainer(this.props.actions);
-    var styles = this.getStyles();
+  render() {
+    let actions = this._getActionsContainer(this.props.actions);
+    let styles = this.getStyles();
 
     return (
       <div ref="container" style={this.mergeAndPrefix(styles.root, this.props.style, this.state.open && styles.rootWhenOpen)}>
@@ -128,24 +129,24 @@ var DialogWindow = React.createClass({
     );
   },
 
-  isOpen: function() {
+  isOpen() {
     return this.state.open;
   },
 
-  dismiss: function() {
+  dismiss() {
     if (this.closeable) {
-      CssEvent.onTransitionEnd(React.findDOMNode(this), function() {
+      CssEvent.onTransitionEnd(React.findDOMNode(this), () => {
         this.refs.dialogOverlay.allowScrolling();
-      }.bind(this));
+      });
 
       this.setState({ open: false });
       this._onDismiss();
     }
   },
 
-  show: function() {
+  show() {
     // prevent rapid show/hide
-    setTimeout(function(){this.closeable = true;}.bind(this), 250);
+    setTimeout(() => {this.closeable = true;}, 250);
 
     this.refs.dialogOverlay.preventScrolling();
     this._focusOnAction();
@@ -153,9 +154,9 @@ var DialogWindow = React.createClass({
     this._onShow();
   },
 
-  _getAction: function(actionJSON, key) {
-    var styles = {marginRight: 8};
-    var props = {
+  _getAction(actionJSON, key) {
+    let styles = {marginRight: 8};
+    let props = {
       key: key,
       secondary: true,
       onClick: actionJSON.onClick,
@@ -181,10 +182,10 @@ var DialogWindow = React.createClass({
     );
   },
 
-  _getActionsContainer: function(actions) { //json w/ refs
-    var actionContainer;
-    var actionObjects = [];
-    var actionStyle = {
+  _getActionsContainer(actions) { //json w/ refs
+    let actionContainer;
+    let actionObjects = [];
+    let actionStyle = {
       boxSizing: 'border-box',
       WebkitTapHighlightColor: 'rgba(s0,0,0,0)',
       padding: 8,
@@ -194,8 +195,8 @@ var DialogWindow = React.createClass({
     };
 
     if (actions.length) {
-      for (var i = 0; i < actions.length; i++) {
-        var currentAction = actions[i];
+      for (let i = 0; i < actions.length; i++) {
+        let currentAction = actions[i];
 
         //if the current action isn't a react object, create one
         if (!React.isValidElement(currentAction)) {
@@ -214,16 +215,16 @@ var DialogWindow = React.createClass({
     return actionContainer;
   },
 
-  _positionDialog: function() {
-    var container = React.findDOMNode(this);
-    var dialogWindow = React.findDOMNode(this.refs.dialogWindow);
-    var containerHeight = container.offsetHeight;
-    var dialogWindowHeight = dialogWindow.offsetHeight;
+  _positionDialog() {
+    let container = React.findDOMNode(this);
+    let dialogWindow = React.findDOMNode(this.refs.dialogWindow);
+    let containerHeight = container.offsetHeight;
+    let dialogWindowHeight = dialogWindow.offsetHeight;
 
     //Reset the height in case the window was resized.
     dialogWindow.style.height = '';
 
-    var paddingTop = Math.max(((containerHeight - dialogWindowHeight) / 2) - 64, 0);
+    let paddingTop = Math.max(((containerHeight - dialogWindowHeight) / 2) - 64, 0);
 
     //Vertically center the dialog window, but make sure it doesn't
     //transition to that position.
@@ -233,28 +234,28 @@ var DialogWindow = React.createClass({
 
   },
 
-  _focusOnAction: function() {
+  _focusOnAction() {
     if (this.props.actionFocus) {
       React.findDOMNode(this.refs[this.props.actionFocus]).focus();
     }
   },
 
-  _onShow: function() {
+  _onShow() {
     if (this.props.onShow) this.props.onShow();
   },
 
-  _onDismiss: function() {
+  _onDismiss() {
     if (this.props.onDismiss) this.props.onDismiss();
   },
 
-  _handleOverlayTouchTap: function() {
+  _handleOverlayTouchTap() {
     if (!this.props.modal && this.closeable) {
       this.dismiss();
       if (this.props.onClickAway) this.props.onClickAway();
     }
   },
 
-  _handleWindowKeyUp: function(e) {
+  _handleWindowKeyUp(e) {
     if (!this.props.modal && e.keyCode == KeyCode.ESC) {
       this.dismiss();
     }

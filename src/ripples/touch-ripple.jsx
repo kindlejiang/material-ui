@@ -1,8 +1,10 @@
-var React = require('react');
-var StylePropable = require('../mixins/style-propable');
-var Dom = require('../utils/dom');
-var RippleCircle = require('./circle');
-var TouchRipple = React.createClass({
+let React = require('react');
+let StylePropable = require('../mixins/style-propable');
+let Dom = require('../utils/dom');
+let RippleCircle = require('./circle');
+
+
+let TouchRipple = React.createClass({
 
   mixins: [StylePropable],
 
@@ -12,7 +14,7 @@ var TouchRipple = React.createClass({
     opacity: React.PropTypes.number,
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       ripples: [{
         key: 0,
@@ -22,9 +24,9 @@ var TouchRipple = React.createClass({
     };
   },
 
-  render: function() {
+  render() {
 
-    var styles = this.mergeAndPrefix({
+    let styles = this.mergeAndPrefix({
       height: '100%',
       width: '100%',
       position: 'absolute',
@@ -47,11 +49,11 @@ var TouchRipple = React.createClass({
     );
   },
 
-  start: function(e, isRippleTouchGenerated) {
-    var ripples = this.state.ripples;
-    var nextKey = ripples[ripples.length-1].key + 1;
-    var style = !this.props.centerRipple ? this._getRippleStyle(e) : {};
-    var ripple;
+  start(e, isRippleTouchGenerated) {
+    let ripples = this.state.ripples;
+    let nextKey = ripples[ripples.length-1].key + 1;
+    let style = !this.props.centerRipple ? this._getRippleStyle(e) : {};
+    let ripple;
 
     //Do nothing if we're starting a click-event-generated ripple
     //while having touch-generated ripples
@@ -85,13 +87,13 @@ var TouchRipple = React.createClass({
     });
   },
 
-  end: function() {
-    var ripples = this.state.ripples;
-    var ripple;
-    var endingRipple;
+  end() {
+    let ripples = this.state.ripples;
+    let ripple;
+    let endingRipple;
 
     //End the the next un-ended ripple
-    for (var i = 0; i < ripples.length; i++) {
+    for (let i = 0; i < ripples.length; i++) {
       ripple = ripples[i];
       if (ripple.started && !ripple.ending) {
         ripple.ending = true;
@@ -108,59 +110,59 @@ var TouchRipple = React.createClass({
       });
 
       //Wait 2 seconds and remove the ripple from DOM
-      setTimeout(function() {
+      setTimeout(() => {
         ripples.shift();
         if (this.isMounted()) {
           this.setState({
             ripples: ripples
           });
         }
-      }.bind(this), 2000);
+      }, 2000);
     }
   },
 
-  _handleMouseDown: function(e) {
+  _handleMouseDown(e) {
     //only listen to left clicks
     if (e.button === 0) this.start(e, false);
   },
 
-  _handleMouseUp: function() {
+  _handleMouseUp() {
     this.end();
   },
 
-  _handleMouseOut: function() {
+  _handleMouseOut() {
     this.end();
   },
 
-  _handleTouchStart: function(e) {
+  _handleTouchStart(e) {
     this.start(e, true);
   },
 
-  _handleTouchEnd: function() {
+  _handleTouchEnd() {
     this.end();
   },
 
-  _getRippleStyle: function(e) {
-    var style = {};
-    var el = React.findDOMNode(this);
-    var elHeight = el.offsetHeight;
-    var elWidth = el.offsetWidth;
-    var offset = Dom.offset(el);
-    var isTouchEvent = e.touches && e.touches.length;
-    var pageX = isTouchEvent ? e.touches[0].pageX : e.pageX;
-    var pageY = isTouchEvent ? e.touches[0].pageY : e.pageY;
-    var pointerX = pageX - offset.left;
-    var pointerY = pageY - offset.top;
-    var topLeftDiag = this._calcDiag(pointerX, pointerY);
-    var topRightDiag = this._calcDiag(elWidth - pointerX, pointerY);
-    var botRightDiag = this._calcDiag(elWidth - pointerX, elHeight - pointerY);
-    var botLeftDiag = this._calcDiag(pointerX, elHeight - pointerY);
-    var rippleRadius = Math.max(
+  _getRippleStyle(e) {
+    let style = {};
+    let el = React.findDOMNode(this);
+    let elHeight = el.offsetHeight;
+    let elWidth = el.offsetWidth;
+    let offset = Dom.offset(el);
+    let isTouchEvent = e.touches && e.touches.length;
+    let pageX = isTouchEvent ? e.touches[0].pageX : e.pageX;
+    let pageY = isTouchEvent ? e.touches[0].pageY : e.pageY;
+    let pointerX = pageX - offset.left;
+    let pointerY = pageY - offset.top;
+    let topLeftDiag = this._calcDiag(pointerX, pointerY);
+    let topRightDiag = this._calcDiag(elWidth - pointerX, pointerY);
+    let botRightDiag = this._calcDiag(elWidth - pointerX, elHeight - pointerY);
+    let botLeftDiag = this._calcDiag(pointerX, elHeight - pointerY);
+    let rippleRadius = Math.max(
       topLeftDiag, topRightDiag, botRightDiag, botLeftDiag
     );
-    var rippleSize = rippleRadius * 2;
-    var left = pointerX - rippleRadius;
-    var top = pointerY - rippleRadius;
+    let rippleSize = rippleRadius * 2;
+    let left = pointerX - rippleRadius;
+    let top = pointerY - rippleRadius;
 
     style.height = rippleSize + 'px';
     style.width = rippleSize + 'px';
@@ -170,12 +172,12 @@ var TouchRipple = React.createClass({
     return style;
   },
 
-  _calcDiag: function(a, b) {
+  _calcDiag(a, b) {
     return Math.sqrt((a * a) + (b * b));
   },
 
-  _getRippleElements: function() {
-    return this.state.ripples.map(function(ripple) {
+  _getRippleElements() {
+    return this.state.ripples.map((ripple) => {
       return (
         <RippleCircle
           key={ripple.key}
@@ -185,7 +187,7 @@ var TouchRipple = React.createClass({
           color={this.props.color}
           opacity={this.props.opacity} />
       );
-    }.bind(this));
+    });
   }
 
 });

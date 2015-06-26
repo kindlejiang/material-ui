@@ -1,10 +1,10 @@
-var React = require('react');
-var PageWithNav = require('./page-with-nav.jsx');
+let React = require('react');
+let PageWithNav = require('./page-with-nav');
 
 class Components extends React.Component {
 
   render() {
-    var menuItems = [
+    let menuItems = [
       { route: 'appbar', text: 'AppBar'},
       { route: 'avatars', text: 'Avatars'},
       { route: 'buttons', text: 'Buttons'},
@@ -14,6 +14,7 @@ class Components extends React.Component {
       { route: 'dropdown-menu', text: 'Dropdown Menu'},
       { route: 'icons', text: 'Icons'},
       { route: 'icon-buttons', text: 'Icon Buttons'},
+      { route: 'icon-menus', text: 'Icon Menus'},
       { route: 'left-nav', text: 'Left Nav'},
       { route: 'lists', text: 'Lists'},
       { route: 'menus', text: 'Menus'},
@@ -22,6 +23,7 @@ class Components extends React.Component {
       { route: 'sliders', text: 'Sliders'},
       { route: 'switches', text: 'Switches'},
       { route: 'snackbar', text: 'Snackbar'},
+      { route: 'table', text: 'Table'},
       { route: 'tabs', text: 'Tabs'},
       { route: 'text-fields', text: 'Text Fields'},
       { route: 'time-picker', text: 'Time Picker'},

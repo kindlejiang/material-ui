@@ -1,22 +1,21 @@
-var React = require('react');
-var mui = require('mui');
-var SvgIcon = mui.SvgIcon;
+let React = require('react');
 
-var MobileTearSheet = React.createClass({
+
+let MobileTearSheet = React.createClass({
 
   propTypes: {
     height: React.PropTypes.number
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       height: 500
     };
   },
 
-  render: function() {
+  render() {
 
-    var styles = {
+    let styles = {
       root: {
         float: 'left',
         marginBottom: 24,

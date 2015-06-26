@@ -1,16 +1,15 @@
-var React = require('react/addons');
-var mui = require('mui');
-var ClearFix = mui.ClearFix;
-var TextField = mui.TextField;
-var SelectField = mui.SelectField;
-var StyleResizable = mui.Mixins.StyleResizable;
-var ComponentDoc = require('../../component-doc.jsx');
+let React = require('react/addons');
+let { ClearFix, Mixins, SelectField, TextField } = require('material-ui');
+let ComponentDoc = require('../../component-doc');
 
-var TextFieldsPage = React.createClass({
+let { StyleResizable } = Mixins;
+
+
+let TextFieldsPage = React.createClass({
 
   mixins: [StyleResizable, React.addons.LinkedStateMixin],
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       errorText: 'This field is required.',
       error2Text: 'This field must be numeric.',
@@ -25,8 +24,8 @@ var TextFieldsPage = React.createClass({
     };
   },
 
-  getStyles: function() {
-    var styles = {
+  getStyles() {
+    let styles = {
       group: {
         width: '100%',
         float: 'left',
@@ -44,9 +43,9 @@ var TextFieldsPage = React.createClass({
     return styles;
   },
 
-  render: function() {
+  render() {
 
-    var code =
+    let code =
       '//In Line Hint Text\n' +
       '<TextField\n' +
       '  hintText="Hint Text" />\n' +
@@ -146,10 +145,10 @@ var TextFieldsPage = React.createClass({
       '    <input type="password" />\n' +
       '</TextField>';
 
-    var desc = 'This component extends the current input element and will support all of its props and events. It supports ' +
+    let desc = 'This component extends the current input element and will support all of its props and events. It supports ' +
       'valueLink and can be controlled or uncontrolled.' ;
 
-    var componentInfo = [
+    let componentInfo = [
       {
         name: 'Props',
         infoArray: [
@@ -257,15 +256,15 @@ var TextFieldsPage = React.createClass({
       }
     ];
 
-    var styles = this.getStyles();
-    var menuItems = [
+    let styles = this.getStyles();
+    let menuItems = [
       { payload: '1', text: 'Never' },
       { payload: '2', text: 'Every Night' },
       { payload: '3', text: 'Weeknights' },
       { payload: '4', text: 'Weekends' },
       { payload: '5', text: 'Weekly' },
     ];
-    var arbitraryArrayMenuItems = [
+    let arbitraryArrayMenuItems = [
      {id:1, name:'Never'},
      {id:2, name:'Every Night'},
      {id:3, name:'Weeknights'},
@@ -394,47 +393,47 @@ var TextFieldsPage = React.createClass({
     );
   },
 
-  _handleErrorInputChange: function(e) {
+  _handleErrorInputChange(e) {
     this.setState({
       errorText: e.target.value ? '' : 'This field is required.'
     });
   },
 
-  _handleError2InputChange: function(e) {
-    var value = e.target.value;
-    var isNumeric = !isNaN(parseFloat(value)) && isFinite(value);
+  _handleError2InputChange(e) {
+    let value = e.target.value;
+    let isNumeric = !isNaN(parseFloat(value)) && isFinite(value);
     this.setState({
       error2Text: isNumeric ? '' : 'This field must be numeric.'
     });
   },
 
-  _handleFloatingErrorInputChange: function(e) {
+  _handleFloatingErrorInputChange(e) {
     this.setState({
       floatingErrorText: e.target.value ? '' : 'This field is required.'
     });
   },
 
-  _handleFloating2ErrorInputChange: function(e) {
-    var value = e.target.value;
-    var isNumeric = !isNaN(parseFloat(value)) && isFinite(value);
+  _handleFloating2ErrorInputChange(e) {
+    let value = e.target.value;
+    let isNumeric = !isNaN(parseFloat(value)) && isFinite(value);
     this.setState({
       floatingError2Text: isNumeric ? '' : 'This field must be numeric.'
     });
   },
 
-  _handleInputChange: function(e) {
+  _handleInputChange(e) {
     this.setState({
       propValue: e.target.value
     });
   },
 
-  _handleSelectValueChange: function(e) {
+  _handleSelectValueChange(e) {
     this.setState({
       selectValue: e.target.value
     });
   },
 
-  _handleFloatingInputChange: function(e) {
+  _handleFloatingInputChange(e) {
     this.setState({
       floatingPropValue: e.target.value
     });

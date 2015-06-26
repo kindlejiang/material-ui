@@ -1,14 +1,19 @@
-var React = require('react');
-var StylePropable = require('./mixins/style-propable');
-var Transitions = require('./styles/transitions');
-var Spacing = require('./styles/spacing');
-var ClickAwayable = require('./mixins/click-awayable');
-var FontIcon = require('./font-icon');
-var Menu = require('./menu/menu');
+let React = require('react');
+let StylePropable = require('./mixins/style-propable');
+let Transitions = require('./styles/transitions');
+let Spacing = require('./styles/spacing');
+let ClickAwayable = require('./mixins/click-awayable');
+let FontIcon = require('./font-icon');
+let Menu = require('./menu/menu');
 
-var DropDownIcon = React.createClass({
+
+let DropDownIcon = React.createClass({
 
   mixins: [StylePropable, ClickAwayable],
+
+  contextTypes: {
+    muiTheme: React.PropTypes.object
+  },
 
   propTypes: {
     onChange: React.PropTypes.func,
@@ -19,31 +24,38 @@ var DropDownIcon = React.createClass({
     iconLigature: React.PropTypes.string
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       open: false,
     }
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       closeOnMenuItemTouchTap: true
     }
   },
 
-  componentClickAway: function() {
+  componentDidMount() {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('DropDownIcon has been deprecated. Use IconMenu instead.');
+    }
+  },
+
+  componentClickAway() {
     this.setState({ open: false });
   },
 
-  getStyles: function() {
-    var iconWidth = 48;
-    var styles = {
+  getStyles() {
+    let spacing = this.context.muiTheme.spacing;
+    let iconWidth = 48;
+    let styles = {
       root: {
         display: 'inline-block',
         width: iconWidth + 'px !important',
         position: 'relative',
-        height: Spacing.desktopToolbarHeight,
-        fontSize: Spacing.desktopDropDownMenuFontSize,
+        height: spacing.desktopToolbarHeight,
+        fontSize: spacing.desktopDropDownMenuFontSize,
         cursor: 'pointer'
        },
       menu: {
@@ -53,16 +65,16 @@ var DropDownIcon = React.createClass({
         opacity: (this.state.open) ? 1 : 0
       },
       menuItem: { // similair to drop down menu's menu item styles
-        paddingRight: (Spacing.iconSize + (Spacing.desktopGutterLess*2)),
-        height: Spacing.desktopDropDownMenuItemHeight,
-        lineHeight: Spacing.desktopDropDownMenuItemHeight + 'px'
+        paddingRight: (spacing.iconSize + (spacing.desktopGutterLess*2)),
+        height: spacing.desktopDropDownMenuItemHeight,
+        lineHeight: spacing.desktopDropDownMenuItemHeight + 'px'
       }
     };
     return styles;
   },
 
-  render: function() {
-    var {
+  render() {
+    let {
       style,
       children,
       menuItems,
@@ -72,7 +84,7 @@ var DropDownIcon = React.createClass({
       ...other
     } = this.props;
 
-    var styles = this.getStyles();
+    let styles = this.getStyles();
 
     return (
       <div {...other} style={this.mergeAndPrefix(styles.root, this.props.style)}>
@@ -94,11 +106,11 @@ var DropDownIcon = React.createClass({
     );
   },
 
-  _onControlClick: function() {
+  _onControlClick() {
     this.setState({ open: !this.state.open });
   },
 
-  _onMenuItemClick: function(e, key, payload) {
+  _onMenuItemClick(e, key, payload) {
     if (this.props.onChange) this.props.onChange(e, key, payload);
 
     if (this.props.closeOnMenuItemTouchTap) {

@@ -22,6 +22,7 @@ module.exports = {
   FloatingActionButton: require('./floating-action-button'),
   FontIcon: require('./font-icon'),
   IconButton: require('./icon-button'),
+  IconMenu: require('./menus/icon-menu'),
   LeftNav: require('./left-nav'),
   LinearProgress: require('./linear-progress'),
   List: require('./lists/list'),
@@ -44,9 +45,9 @@ module.exports = {
   Slider: require('./slider'),
   SvgIcon: require('./svg-icon'),
   Icons: {
-    NavigationMenu: require('./svg-icons/navigation-menu'),
-    NavigationChevronLeft: require('./svg-icons/navigation-chevron-left'),
-    NavigationChevronRight: require('./svg-icons/navigation-chevron-right')
+    NavigationMenu: require('./svg-icons/navigation/menu'),
+    NavigationChevronLeft: require('./svg-icons/navigation/chevron-left'),
+    NavigationChevronRight: require('./svg-icons/navigation/chevron-right')
   },
   Styles: {
     AutoPrefix: require('./styles/auto-prefix'),
@@ -58,6 +59,7 @@ module.exports = {
   },
   Snackbar: require('./snackbar'),
   Tab: require('./tabs/tab'),
+  Table: require('./table/table'),
   Tabs: require('./tabs/tabs'),
   Theme: require('./theme'),
   Toggle: require('./toggle'),

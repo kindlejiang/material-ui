@@ -1,12 +1,21 @@
-var React = require('react');
-var StylePropable = require('./mixins/style-propable');
-var Transitions = require('./styles/transitions');
-var ColorManipulator = require('./utils/color-manipulator');
-var Typography = require('./styles/typography');
-var EnhancedButton = require('./enhanced-button');
-var Paper = require('./paper');
+let React = require('react');
+let StylePropable = require('./mixins/style-propable');
+let Transitions = require('./styles/transitions');
+let ColorManipulator = require('./utils/color-manipulator');
+let Typography = require('./styles/typography');
+let EnhancedButton = require('./enhanced-button');
+let Paper = require('./paper');
 
-var RaisedButton = React.createClass({
+
+function validateLabel (props, propName, componentName) {
+  if (!props.children && !props.label) {
+    return new Error('Required prop label or children was not ' +
+      'specified in ' + componentName + '.');
+  }
+}
+
+
+let RaisedButton = React.createClass({
 
   mixins: [StylePropable],
 
@@ -17,11 +26,7 @@ var RaisedButton = React.createClass({
   propTypes: {
     className: React.PropTypes.string,
     disabled: React.PropTypes.bool,
-    label: function(props, propName, componentName){
-      if (!props.children && !props.label) {
-        return new Error('Warning: Required prop `label` or `children` was not specified in `'+ componentName + '`.')
-      }
-    },
+    label: validateLabel,
     onMouseDown: React.PropTypes.func,
     onMouseUp: React.PropTypes.func,
     onMouseOut: React.PropTypes.func,
@@ -32,48 +37,49 @@ var RaisedButton = React.createClass({
     labelStyle: React.PropTypes.object,
   },
 
-  getInitialState: function() {
-    var zDepth = this.props.disabled ? 0 : 1;
+  getInitialState() {
+    let zDepth = this.props.disabled ? 0 : 1;
     return {
-      zDepth: zDepth,
+      hovered: false,
+      touched: false,
       initialZDepth: zDepth,
-      hovered: false
+      zDepth: zDepth
     };
   },
 
-  componentWillReceiveProps: function(nextProps) {
-    var zDepth = nextProps.disabled ? 0 : 1;
+  componentWillReceiveProps(nextProps) {
+    let zDepth = nextProps.disabled ? 0 : 1;
     this.setState({
       zDepth: zDepth,
-      initialZDepth: zDepth,
+      initialZDepth: zDepth
     });
   },
 
-  _getBackgroundColor: function() {
+  _getBackgroundColor() {
     return  this.props.disabled ? this.getTheme().disabledColor :
-            this.props.primary ? this.getTheme().primaryColor :
-            this.props.secondary ? this.getTheme().secondaryColor :
-            this.getTheme().color; 
+      this.props.primary ? this.getTheme().primaryColor :
+      this.props.secondary ? this.getTheme().secondaryColor :
+      this.getTheme().color;
   },
 
-  _getLabelColor: function() {
+  _getLabelColor() {
     return  this.props.disabled ? this.getTheme().disabledTextColor :
-            this.props.primary ? this.getTheme().primaryTextColor :
-            this.props.secondary ? this.getTheme().secondaryTextColor :
-            this.getTheme().textColor;
+      this.props.primary ? this.getTheme().primaryTextColor :
+      this.props.secondary ? this.getTheme().secondaryTextColor :
+      this.getTheme().textColor;
   },
 
-  getThemeButton: function() {
+  getThemeButton() {
     return this.context.muiTheme.component.button;
   },
 
-  getTheme: function() {
+  getTheme() {
     return this.context.muiTheme.component.raisedButton;
   },
 
-  getStyles: function() {
-    var amount = (this.props.primary || this.props.secondary) ? 0.4 : 0.08;
-    var styles = {
+  getStyles() {
+    let amount = (this.props.primary || this.props.secondary) ? 0.4 : 0.08;
+    let styles = {
       root: {
         display: 'inline-block',
         minWidth: this.getThemeButton().minWidth,
@@ -119,17 +125,17 @@ var RaisedButton = React.createClass({
     return styles;
   },
 
-  render: function() {
-    var {
+  render() {
+    let {
       disabled,
       label,
       primary,
       secondary,
       ...other } = this.props;
 
-    var styles = this.getStyles();
+    let styles = this.getStyles();
 
-    var labelElement;
+    let labelElement;
     if (label) {
       labelElement = (
         <span style={this.mergeAndPrefix(styles.label, this.props.labelStyle)}>
@@ -138,10 +144,10 @@ var RaisedButton = React.createClass({
       );
     }
 
-    var rippleColor = styles.label.color;
-    var rippleOpacity = !(primary || secondary) ? 0.1 : 0.16;
+    let rippleColor = styles.label.color;
+    let rippleOpacity = !(primary || secondary) ? 0.1 : 0.16;
 
-    var buttonEventHandlers = disabled ? null : {
+    let buttonEventHandlers = disabled ? null : {
       onMouseDown: this._handleMouseDown,
       onMouseUp: this._handleMouseUp,
       onMouseOut: this._handleMouseOut,
@@ -152,7 +158,7 @@ var RaisedButton = React.createClass({
     };
 
     return (
-      <Paper 
+      <Paper
         style={this.mergeAndPrefix(styles.root, this.props.style)}
         zDepth={this.state.zDepth}>
           <EnhancedButton
@@ -177,7 +183,7 @@ var RaisedButton = React.createClass({
     );
   },
 
-  _handleMouseDown: function(e) {
+  _handleMouseDown(e) {
     //only listen to left clicks
     if (e.button === 0) {
       this.setState({ zDepth: this.state.initialZDepth + 1 });
@@ -185,41 +191,46 @@ var RaisedButton = React.createClass({
     if (this.props.onMouseDown) this.props.onMouseDown(e);
   },
 
-  _handleMouseUp: function(e) {
+  _handleMouseUp(e) {
     this.setState({ zDepth: this.state.initialZDepth });
     if (this.props.onMouseUp) this.props.onMouseUp(e);
   },
 
-  _handleMouseOut: function(e) {
+  _handleMouseOut(e) {
     if (!this.refs.container.isKeyboardFocused()) this.setState({ zDepth: this.state.initialZDepth, hovered: false });
     if (this.props.onMouseOut) this.props.onMouseOut(e);
   },
 
-  _handleMouseOver: function(e) {
-    if (!this.refs.container.isKeyboardFocused()) this.setState({hovered: true});
+  _handleMouseOver(e) {
+    if (!this.refs.container.isKeyboardFocused() && !this.state.touch) {
+      this.setState({hovered: true});
+    }
     if (this.props.onMouseOver) this.props.onMouseOver(e);
   },
 
-  _handleTouchStart: function(e) {
-    this.setState({ zDepth: this.state.initialZDepth + 1 });
+  _handleTouchStart(e) {
+    this.setState({
+      touch: true,
+      zDepth: this.state.initialZDepth + 1
+    });
     if (this.props.onTouchStart) this.props.onTouchStart(e);
   },
 
-  _handleTouchEnd: function(e) {
+  _handleTouchEnd(e) {
     this.setState({ zDepth: this.state.initialZDepth });
     if (this.props.onTouchEnd) this.props.onTouchEnd(e);
   },
 
-  _handleKeyboardFocus: function(e, keyboardFocused) {
+  _handleKeyboardFocus(e, keyboardFocused) {
     if (keyboardFocused && !this.props.disabled) {
       this.setState({ zDepth: this.state.initialZDepth + 1 });
-      var amount = (this.props.primary || this.props.secondary) ? 0.4 : 0.08;
+      let amount = (this.props.primary || this.props.secondary) ? 0.4 : 0.08;
       React.findDOMNode(this.refs.overlay).style.backgroundColor = ColorManipulator.fade(this.mergeAndPrefix(this.getStyles().label, this.props.labelStyle).color, amount);
     } else if (!this.state.hovered) {
       this.setState({ zDepth: this.state.initialZDepth });
       React.findDOMNode(this.refs.overlay).style.backgroundColor = 'transparent';
     }
-  },
+  }
 });
 
 module.exports = RaisedButton;

@@ -13,6 +13,7 @@ var gulp         = require('gulp');
 var handleErrors = require('../util/handleErrors');
 var source       = require('vinyl-source-stream');
 var config       = require('../config').browserify;
+var babelify     = require('babelify');
 
 gulp.task('browserify', function(callback) {
 
@@ -48,7 +49,9 @@ gulp.task('browserify', function(callback) {
         .on('end', reportFinished);
     };
 
-    if(global.isWatching) {
+    bundler.transform(babelify.configure({stage: 1}));
+
+    if (global.isWatching) {
       // Wrap with watchify and rebundle on changes
       bundler = watchify(bundler);
       // Rebundle on update
@@ -59,9 +62,9 @@ gulp.task('browserify', function(callback) {
       // Log when bundling completes
       bundleLogger.end(bundleConfig.outputName);
 
-      if(bundleQueue) {
+      if (bundleQueue) {
         bundleQueue--;
-        if(bundleQueue === 0) {
+        if (bundleQueue === 0) {
           // If queue is empty, tell gulp the task is complete.
           // https://github.com/gulpjs/gulp/blob/master/docs/API.md#accept-a-callback
           callback();

@@ -1,8 +1,9 @@
-var React = require('react/addons');
-var StylePropable = require('./mixins/style-propable');
-var Transitions = require('./styles/transitions');
+let React = require('react/addons');
+let StylePropable = require('./mixins/style-propable');
+let Transitions = require('./styles/transitions');
 
-var SvgIcon = React.createClass({
+
+let SvgIcon = React.createClass({
 
   mixins: [StylePropable],
 
@@ -18,21 +19,20 @@ var SvgIcon = React.createClass({
     viewBox: React.PropTypes.string
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       hovered: false
     };
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       viewBox: '0 0 24 24'
     };
   },
 
-  render: function() {
-
-    var {
+  render() {
+    let {
       color,
       hoverColor,
       viewBox,
@@ -40,15 +40,15 @@ var SvgIcon = React.createClass({
       ...other
     } = this.props;
 
-    var offColor = color ? color :
+    let offColor = color ? color :
       style && style.fill ? style.fill : this.context.muiTheme.palette.textColor;
-    var onColor = hoverColor ? hoverColor : offColor;
+    let onColor = hoverColor ? hoverColor : offColor;
 
     //remove the fill prop so that it doesn't override our computed
     //fill from above
     if (style) delete style.fill;
 
-    var mergedStyles = this.mergeAndPrefix({
+    let mergedStyles = this.mergeAndPrefix({
       display: 'inline-block',
       height: 24,
       width: 24,
@@ -69,14 +69,14 @@ var SvgIcon = React.createClass({
     );
   },
 
-  _handleMouseOut: function(e) {
+  _handleMouseOut(e) {
     this.setState({hovered: false});
     if (this.props.onMouseOut) {
       this.props.onMouseOut(e);
     }
   },
 
-  _handleMouseOver: function(e) {
+  _handleMouseOver(e) {
     this.setState({hovered: true});
     if (this.props.onMouseOver) {
       this.props.onMouseOver(e);

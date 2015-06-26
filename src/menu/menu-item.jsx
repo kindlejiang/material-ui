@@ -1,15 +1,16 @@
-var React = require('react');
-var StylePropable = require('../mixins/style-propable');
-var FontIcon = require('../font-icon');
-var Toggle = require('../toggle');
+let React = require('react');
+let StylePropable = require('../mixins/style-propable');
+let FontIcon = require('../font-icon');
+let Toggle = require('../toggle');
 
-var Types = {
+const Types = {
   LINK: 'LINK',
   SUBHEADER: 'SUBHEADER',
   NESTED: 'NESTED'
 };
 
-var MenuItem = React.createClass({
+
+let MenuItem = React.createClass({
 
   mixins: [StylePropable],
 
@@ -39,7 +40,7 @@ var MenuItem = React.createClass({
     Types: Types
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       toggle: false,
       disabled: false,
@@ -47,16 +48,16 @@ var MenuItem = React.createClass({
     };
   },
 
-  getTheme: function() {
+  getTheme() {
     return this.context.muiTheme.component.menuItem;
   },
 
-  getSpacing: function() {
+  getSpacing() {
     return this.context.muiTheme.spacing;
   },
 
-  getStyles: function() {
-    var styles = {
+  getStyles() {
+    let styles = {
       root: {
         userSelect: 'none',
         cursor: 'pointer',
@@ -112,15 +113,15 @@ var MenuItem = React.createClass({
     return styles;
   },
 
-  render: function() {
-    var icon;
-    var data;
-    var iconRight;
-    var attribute;
-    var number;
-    var toggleElement;
+  render() {
+    let icon;
+    let data;
+    let iconRight;
+    let attribute;
+    let number;
+    let toggleElement;
 
-    var styles = this.getStyles();
+    let styles = this.getStyles();
 
     if (this.props.iconClassName) icon = <FontIcon style={this.mergeAndPrefix(styles.icon, this.props.iconStyle)} className={this.props.iconClassName} />;
     if (this.props.iconRightClassName) iconRight = <FontIcon style={this.mergeAndPrefix(styles.iconRight, this.props.iconRightStyle)} className={this.props.iconRightClassName} />;
@@ -129,7 +130,7 @@ var MenuItem = React.createClass({
     if (this.props.attribute !== undefined) attribute = <span style={this.mergeAndPrefix(styles.style)}>{this.props.attribute}</span>;
 
     if (this.props.toggle) {
-      var {
+      let {
         toggle,
         onTouchTap,
         onToggle,
@@ -149,7 +150,7 @@ var MenuItem = React.createClass({
         className={this.props.className}
         onTouchTap={this._handleTouchTap}
         onMouseOver={this._handleMouseOver}
-        onMouseOut={this._handleMouseOut}f
+        onMouseOut={this._handleMouseOut}
         style={this.mergeAndPrefix(
           styles.root,
           this.props.selected && styles.rootWhenSelected,
@@ -169,19 +170,19 @@ var MenuItem = React.createClass({
     );
   },
 
-  _handleTouchTap: function(e) {
+  _handleTouchTap(e) {
     if (!this.props.disabled && this.props.onTouchTap) this.props.onTouchTap(e, this.props.index);
   },
 
-  _handleToggle: function(e, toggled) {
+  _handleToggle(e, toggled) {
     if (!this.props.disabled && this.props.onToggle) this.props.onToggle(e, this.props.index, toggled);
   },
 
-  _handleMouseOver: function(e) {
+  _handleMouseOver(e) {
     if (!this.props.disabled && this.props.onMouseOver) this.props.onMouseOver(e, this.props.index);
   },
 
-  _handleMouseOut: function(e) {
+  _handleMouseOut(e) {
     if (!this.props.disabled && this.props.onMouseOut) this.props.onMouseOut(e,this.props.index);
   }
 });

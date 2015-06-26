@@ -1,8 +1,9 @@
-var React = require('react');
-var Styles = require('../styles');
-var StylePropable = require('../mixins/style-propable');
+let React = require('react');
+let Styles = require('../styles');
+let StylePropable = require('../mixins/style-propable');
 
-var CardText = React.createClass({
+
+let CardText = React.createClass({
 
   mixins:[StylePropable],
 
@@ -11,13 +12,13 @@ var CardText = React.createClass({
     style: React.PropTypes.object
   },
 
-  getDefaultProps: function () {
+  getDefaultProps() {
     return {
       color: Styles.Colors.ck
     }
   },
 
-  getStyles: function () {
+  getStyles() {
     return {
       root: {
         padding: 16,
@@ -27,9 +28,9 @@ var CardText = React.createClass({
     }
   },
 
-  render: function () {
-    var styles = this.getStyles();
-    var rootStyle = this.mergeAndPrefix(styles.root, this.props.style);
+  render() {
+    let styles = this.getStyles();
+    let rootStyle = this.mergeAndPrefix(styles.root, this.props.style);
 
     return (
       <div {...this.props} style={rootStyle}>

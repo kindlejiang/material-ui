@@ -1,17 +1,15 @@
-var React = require('react');
-var mui = require('mui');
-var IconButton = mui.IconButton;
-var NavigationMenu = mui.Icons.NavigationMenu;
-var ComponentDoc = require('../../component-doc.jsx');
-var ActionGrade = require('../../svg-icons/action-grade.jsx');
-var ActionHome = require('../../svg-icons/action-home.jsx');
-var FontIcon = mui.FontIcon;
+let React = require('react');
+let { FontIcon, IconButton, NavigationMenu } = require('material-ui');
+let ComponentDoc = require('../../component-doc');
+let ActionGrade = require('svg-icons/action/grade');
+let ActionHome = require('svg-icons/action/home');
+
 
 class IconButtonsPage extends React.Component {
 
   render() {
 
-    var code =
+    let code =
         '//Method 1: muidocs-icon-github is defined in a style sheet.\n' +
         '<IconButton iconClassName="muidocs-icon-custom-github" tooltip="GitHub"/>\n\n' +
         '//Method 2: ActionGrade is a component created using mui.SvgIcon.\n' +
@@ -22,9 +20,12 @@ class IconButtonsPage extends React.Component {
         'IconButton\n' +
         '<IconButton tooltip="Sort" disabled={true}>\n' +
         '  <FontIcon className="muidocs-icon-custom-sort"/>\n' +
-        '</IconButton>';
+        '</IconButton>\n\n' +
+        '//Adding tooltipPosition to Icon Button\n' +
+        '<IconButton iconClassName="muidocs-icon-custom-github" tooltip="bottom-right"\n' +
+        '            tooltipPosition="bottom-right"/>\n';
 
-    var desc = (
+    let desc = (
       <p>
         This component generates a button element and all props.
         Also, focus styles will happen on tab but not on click.
@@ -53,7 +54,7 @@ class IconButtonsPage extends React.Component {
       </p>
     );
 
-    var componentInfo = [
+    let componentInfo = [
       {
         name: 'Props',
         infoArray: [
@@ -81,6 +82,12 @@ class IconButtonsPage extends React.Component {
             type: 'string',
             header: 'optional',
             desc: 'The tooltip text to show.'
+          },
+          {
+            name: 'tooltipPosition',
+            type: 'string',
+            header: 'default: bottom-center',
+            desc: 'Allows the tooltip to be viewed with different alignments: "bottom-center", "top-center", "bottom-right", "top-right", "bottom-left" and "top-left"'
           },
           {
             name: 'touch',
@@ -114,16 +121,47 @@ class IconButtonsPage extends React.Component {
         desc={desc}
         componentInfo={componentInfo}>
 
-        <IconButton iconClassName="muidocs-icon-custom-github" tooltip="GitHub"/>
+        <IconButton iconClassName="muidocs-icon-custom-github" tooltip="bottom-right"  tooltipPosition = "bottom-right" />
 
-      <IconButton tooltip="Star" touch={true}>
+        <IconButton iconClassName="muidocs-icon-custom-github" tooltip="bottom-center" tooltipPosition = "bottom-center" />
+
+        <IconButton iconClassName="muidocs-icon-custom-github" tooltip="bottom-left" tooltipPosition = "bottom-left" />
+
+        <IconButton iconClassName="muidocs-icon-custom-github" tooltip="top-right" tooltipPosition = "top-right" />
+
+        <IconButton iconClassName="muidocs-icon-custom-github" tooltip="top-center" tooltipPosition = "top-center" />
+
+        <IconButton iconClassName="muidocs-icon-custom-github" tooltip="top-left" tooltipPosition = "top-left" />
+        <br/><br/><br/><br/>
+
+        <IconButton tooltip="bottom-right" touch={true} tooltipPosition="bottom-right">
           <ActionGrade/>
         </IconButton>
+
+        <IconButton tooltip="bottom-center" touch={true} tooltipPosition="bottom-center">
+          <ActionGrade/>
+        </IconButton>
+
+        <IconButton tooltip="bottom-left" touch={true} tooltipPosition="bottom-left">
+          <ActionGrade/>
+        </IconButton>
+
+        <IconButton tooltip="top-right" touch={true} tooltipPosition="top-right">
+          <ActionGrade/>
+        </IconButton>
+
+        <IconButton tooltip="top-center" touch={true} tooltipPosition="top-center">
+          <ActionGrade/>
+        </IconButton>
+
+        <IconButton tooltip="top-left" touch={true} tooltipPosition="top-left">
+          <ActionGrade/>
+        </IconButton>
+        <br/><br/><br/>
 
         <IconButton tooltip="Sort" disabled={true}>
           <FontIcon className="muidocs-icon-custom-sort"/>
         </IconButton>
-
       </ComponentDoc>
     );
 

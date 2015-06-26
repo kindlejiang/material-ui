@@ -1,7 +1,9 @@
-var React = require('react');
-var StylePropable = require('./mixins/style-propable');
-var Transitions = require('./styles/transitions');
-var Paper = React.createClass({
+let React = require('react');
+let StylePropable = require('./mixins/style-propable');
+let Transitions = require('./styles/transitions');
+
+
+let Paper = React.createClass({
 
   mixins: [StylePropable],
 
@@ -16,7 +18,7 @@ var Paper = React.createClass({
     transitionEnabled: React.PropTypes.bool
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       rounded: true,
       zDepth: 1,
@@ -24,14 +26,14 @@ var Paper = React.createClass({
     };
   },
 
-  getStyles: function() {
-    var styles = {
+  getStyles() {
+    let styles = {
       root: {
         backgroundColor: this.context.muiTheme.component.paper.backgroundColor,
         transition: this.props.transitionEnabled && Transitions.easeOut(),
         boxSizing: 'border-box',
         fontFamily: this.context.muiTheme.contentFontFamily,
-        WebkitTapHighlightColor: 'rgba(0,0,0,0)', 
+        WebkitTapHighlightColor: 'rgba(0,0,0,0)',
         boxShadow: this._getZDepthShadows(this.props.zDepth),
         borderRadius: this.props.circle ? '50%' :
           this.props.rounded ? '2px' : '0px'
@@ -40,15 +42,15 @@ var Paper = React.createClass({
     return styles;
   },
 
-  render: function() {
-    var {
+  render() {
+    let {
       style,
       circle,
       rounded,
       zDepth,
       ...other } = this.props;
 
-    var styles = this.getStyles();
+    let styles = this.getStyles();
 
     return (
       <div {...other} style={this.mergeAndPrefix(styles.root, this.props.style)}>
@@ -57,9 +59,9 @@ var Paper = React.createClass({
     );
   },
 
-  _getZDepthShadows: function(zDepth) {
-    var shadows = [
-      '',
+  _getZDepthShadows(zDepth) {
+    let shadows = [
+      null,
       '0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24)',
       '0 3px 10px rgba(0, 0, 0, 0.16), 0 3px 10px rgba(0, 0, 0, 0.23)',
       '0 10px 30px rgba(0, 0, 0, 0.19), 0 6px 10px rgba(0, 0, 0, 0.23)',

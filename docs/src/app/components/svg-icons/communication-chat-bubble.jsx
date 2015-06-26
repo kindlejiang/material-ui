@@ -1,10 +1,10 @@
-var React = require('react');
-var mui = require('mui');
-var SvgIcon = mui.SvgIcon;
+let React = require('react');
+let { SvgIcon } = require('mui');
 
-var CommunicationChatBubble = React.createClass({
 
-  render: function() {
+class CommunicationChatBubble extends React.Component {
+
+  render() {
     return (
       <SvgIcon {...this.props}>
         <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"></path>
@@ -12,6 +12,6 @@ var CommunicationChatBubble = React.createClass({
     );
   }
 
-});
+}
 
 module.exports = CommunicationChatBubble;
