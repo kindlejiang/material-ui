@@ -27,13 +27,17 @@ var InkBar = React.createClass({
       height: 2,
       marginTop: -2,
       position: 'relative',
+      overflow: 'hidden',
+      zoom: 1,
       transition: Transitions.easeOut('1s', 'left')
     });
 
     return (
+
       <div style={styles}>
         &nbsp;
       </div>
+
     );
   }
 

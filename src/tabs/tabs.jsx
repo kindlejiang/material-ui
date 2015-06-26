@@ -1,6 +1,7 @@
 var React = require('react/addons');
 var TabTemplate = require('./tabTemplate');
 var InkBar = require('../ink-bar');
+var Paper = require('../paper');
 var StylePropable = require('../mixins/style-propable.js');
 var Events = require('../utils/events');
 
@@ -16,9 +17,14 @@ var Tabs = React.createClass({
   propTypes: {
     initialSelectedIndex: React.PropTypes.number,
     onActive: React.PropTypes.func,
-    tabWidth: React.PropTypes.number
+    tabWidth: React.PropTypes.number,
+    zDepth: React.PropTypes.oneOf([0,1,2,3,4,5]),
   },
-
+  getDefaultProps: function() {
+    return {
+      zDepth: 0,
+    };
+  },
   getInitialState: function(){
     var selectedIndex = 0;
     if (this.props.initialSelectedIndex && this.props.initialSelectedIndex < this.props.children.length) {
@@ -68,23 +74,36 @@ var Tabs = React.createClass({
         margin: '0',
         padding: '0',
         width: '100%',
-        height: '48px',
+
         backgroundColor: themeVariables.backgroundColor,
         whiteSpace: 'nowrap',
         display: 'table'
+      },
+      tabBar: {
+        height: '48px',
+        zIndex: 100,
+        width: '100%',
+        boxShadow:  "0 2px 3px 0 rgba(0,0,0,0.22)",
+        position:'absolute'
+      },
+      tabContent:{
+        width: '100%'
+
       }
     };
   },
+
 
   render: function(){
     var styles = this.getStyles();
 
     var tabContent = []
+    var itemWidth =  window.innerWidth / this.props.children.length;
     var width = this.state.fixedWidth ?
-      100 / this.props.children.length +'%' :
+       itemWidth +'px' :
       this.props.tabWidth + 'px';
 
-    var left = 'calc(' + width + '*' + this.state.selectedIndex + ')';
+    var left = itemWidth * this.state.selectedIndex +"px";//'calc(' + width + '*' + this.state.selectedIndex + ')';
 
     var tabs = React.Children.map(this.props.children, function(tab, index){
       if(tab.type.displayName === "Tab") {
@@ -113,17 +132,30 @@ var Tabs = React.createClass({
     }, this);
     return (
       <div style={this.mergeAndPrefix(this.props.style)}>
+        <div style={this.mergeAndPrefix(styles.tabBar, this.props.tabBarStyle)}>
         <div style={this.mergeAndPrefix(styles.tabItemContainer, this.props.tabItemContainerStyle)}>
           {tabs}
         </div>
-        <InkBar left={left} width={width} />
-        <div>
+          <InkBar left={left} width={width} />
+        </div>
+        <div style={this.mergeAndPrefix(styles.tabContent, this.props.tabContentStyle)}>
           {tabContent}
         </div>
       </div>
     )
   },
+  _getZDepthShadows: function(zDepth) {
+    var shadows = [
+      '',
+      'inset 0 -10px 10px -10px　rgba(0, 0, 0, 0.12)',
+      'inset 0 -20px 20px -20px rgba(0, 0, 0, 0.16)',
+      'inset 0 -30px 30px -30px rgba(0, 0, 0, 0.19)',
+      'inset 0 -40px 40px -40px rgba(0, 0, 0, 0.25)',
+      'inset 0 -60px 60px -60px rgba(0, 0, 0, 0.30)'
+    ];
 
+    return shadows[zDepth];
+  },
   _tabWidthPropIsValid: function() {
     return this.props.tabWidth &&
       (this.props.tabWidth * this.props.children.length <= this.getEvenWidth());
